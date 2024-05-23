@@ -1,0 +1,358 @@
+<script setup>
+import BreezeAuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import BreezeTextArea from '@/Components/TextArea.vue';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
+import axios from 'axios';
+
+const props = defineProps({
+  jobOrders: Array,
+  jobOrderItems: Array,
+  jobOrderServices: Array,
+  jobOrderEmployees: Array,
+  inventories: Array,
+  services: Array,
+  employees: Array
+});
+
+const reversedLogs = computed(() => {
+  return [...props.jobOrders].reverse().filter((jobOrder) => {
+    const hasServices = props.jobOrderServices.some(
+      (service) => service.jobOrderID === jobOrder.id
+    );
+
+    const hasEmployees = props.jobOrderEmployees.some(
+      (employee) => employee.jobOrderID === jobOrder.id
+    );
+
+    return hasServices && hasEmployees;
+  }).map((jobOrder) => {
+    if (jobOrder.jobOrderStatus === 'Cancelled') {
+      const tempTotalItems = props.jobOrderItems.filter((item) => item.jobOrderID === jobOrder.id)
+        .reduce((total, item) => total + item.amountPaid, 0);
+
+      return { ...jobOrder, tempTotal: tempTotalItems };
+    }
+
+    const tempTotalItems = props.jobOrderItems.filter((item) => item.jobOrderID == jobOrder.id)
+      .reduce((total, item) => total + item.amountPaid, 0);
+
+    const tempTotalServices = props.jobOrderServices.filter((service) => service.jobOrderID == jobOrder.id)
+      .reduce((total, service) => total + service.amountPaid, 0);
+
+    const tempTotal = tempTotalItems + tempTotalServices;
+    return { ...jobOrder, tempTotal };
+  });
+});
+const selectedLog = ref(null);
+const jobOrderItems = ref([]);
+const jobOrderServices = ref([]);
+const jobOrderEmployees = ref([]);
+const handleRowClick = (log) => {
+  selectedLog.value = log;
+  console.log(selectedLog.value);
+  jobOrderItems.value = props.jobOrderItems.filter((order) => order.jobOrderID === selectedLog.value.id);
+  jobOrderServices.value = props.jobOrderServices.filter((order) => order.jobOrderID === selectedLog.value.id);
+  jobOrderEmployees.value = props.jobOrderEmployees.filter((order) => order.jobOrderID === selectedLog.value.id);
+};
+
+const formatServiceID = (service) => {
+  return String(service).padStart(5, '0');
+};
+
+const closeInputCard = () => {
+  console.log("Closing Payment Card");
+  isPay.value = false;
+}
+
+const receivePayment = (payment) => {
+  console.log(payment);
+  axios.post(route('job_orders.pay'), {
+    jobOrderID: selectedLog.value.id,
+    customerPayment: payment
+  })
+  closeInputCard();
+  Inertia.visit(route('job_orders.index'));
+}
+</script>
+<template>
+  <Head title="Dashboard" />
+  <BreezeAuthenticatedLayout>
+    <template #header>
+      <h2 class="font-semibold text-xl text-savoy-blue leading-tight">
+        Job Order History
+      </h2>
+    </template>
+    <div class="py-6">
+      <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
+          <div class="flex items-center justify-between">
+            <Link
+              class="px-6 py-2 text-white bg-savoy-blue font-bold font-montserrat rounded-md focus:outline-none hover:bg-vista-blue transition-all duration-300 ease-in-out"
+              :href="route('job_orders.main')">
+            Back
+            </Link>
+          </div>
+        </div>
+        <div class="flex flex-row gap-4 w-full">
+          <!-- Existing table -->
+          <div class="w-2/5 bg-ghost-white rounded-md">
+            <table class="table-auto w-full overflow-hidden rounded-t-md">
+              <thead class="sticky top-0 bg-savoy-blue text-white uppercase">
+                <tr>
+                  <th class="px-2 py-2 w-2/12 font-montserrat text-sm">ID</th>
+                  <th class="px-2 py-2 w-3/12 font-montserrat text-sm">Transaction Date</th>
+                  <th class="px-2 py-2 w-3/12 font-montserrat text-sm">
+                    <span class="inline-block pl-2 -ml-2">Job Order</span>
+                  </th>
+                  <th class="px-2 py-2 w-4/12 font-montserrat text-sm">Total Sales</th>
+                </tr>
+              </thead>
+            </table>
+            <div class="scrollable rounded-md">
+              <table class="table-auto w-full overflow-hidden">
+                <tbody class="bg-ghost-white">
+                  <tr v-for="log in reversedLogs" :key="log.id" @click="handleRowClick(log)" class="hover:bg-silver" >
+                    <td class="border-b px-2 py-2 w-2/12 text-center font-montserrat">#{{ log.id }}</td>
+                    <td class="border-b pl-5 py-2 w-3/12 text-center font-montserrat">{{ log.jobOrderDate }}</td>
+                    <td class="border-b pl-10 px-2 py-2 w-3/12 text-left font-montserrat">
+                      {{ log.jobOrderStatus }}: <span class="italic text-sm">{{ log.paymentStatus }}</span>
+                    </td>
+                    <td class="border-b px-6 py-2 w-4/12 text-right font-montserrat">{{parseFloat(log.tempTotal).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}</td> 
+                    <!-- Removed? old code from inventory log cc: @josh
+                      <template v-if="log.transactionType !== ''">
+                      </template>
+                    -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- New table -->
+          <div class="relative w-3/5">
+            <div class="bg-ghost-white rounded-md p-4" style="height: 790px;">
+              <div v-if="selectedLog === null" class="flex items-center justify-center h-full">
+                <!-- Placeholder content when no row is clicked -->
+                <div class="text-5xl font-montserrat text-savoy-blue" style="color: #BFBFBF;">
+                  Job Order Preview
+                </div>
+              </div>
+              <div v-if="selectedLog !== null">
+                <!-- Content to be displayed when a row is clicked -->
+                <div class="px-8 pb-2 pt-6 flex flex-col justify-between items-center">
+                  <div class="w-full flex">
+                    <div class="w-3/4 flex flex-col">
+                      <div class="text-3xl font-montserrat font-bold text-savoy-blue px-1">Job Order #{{ selectedLog.id }}
+                      </div>
+                      <div class="text-lg font-montserrat font-bold px-1" :class="{
+                        'text-saffron': selectedLog.jobOrderStatus == 'Ongoing',
+                        'text-persian-red': selectedLog.jobOrderStatus == 'Cancelled',
+                        'text-dark-pastel-green': selectedLog.jobOrderStatus == 'Done',
+                      }">
+                        Status: {{ selectedLog.jobOrderStatus }}
+                      </div>
+                    </div>
+                    <div class="w-1/4 flex flex-col pt-1 items-end">
+                      <div class="text-2xl font-montserrat font-bold text-right text-savoy-blue px-1">{{
+                        selectedLog.jobOrderDate }}</div>
+                      <div class="text-lg text-right italic font-montserrat font-bold px-1" :class="{
+                        'text-persian-red': selectedLog.paymentStatus == 'Unpaid',
+                        'text-dark-pastel-green': selectedLog.paymentStatus == 'Fully Paid',
+                      }">
+                        {{ selectedLog.paymentStatus }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full font-montserrat px-1">
+                    <BreezeTextArea id="vehicleDetails" type="input"
+                      className="mt-1 px-2 py-1 rounded-md w-full comments-2 text-sm"
+                      placeholder="Vehicle Model, License Plate, Color, etc." v-model="selectedLog.vehicleDetails"
+                      :disabled="true" />
+                  </div>
+                </div>
+                <div class="px-6">
+                  <hr class="border-t border-solid border-gray-400 my-2">
+                </div>
+                <div className="scrollable-table">
+                  <div>
+                    <table class="table-auto w-full rounded-md">
+                      <thead>
+                        <!-- First row of headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <th class="px-6 py-2 font-montserrat w-full">Mechanic Name</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
+                        <!-- Content row with the same formatting as headers -->
+                        <tr v-if="selectedLog !== null" v-for="employee in jobOrderEmployees"
+                          class="bg-ghost-white text-savoy-blue">
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-full">
+                            <div>{{ props.employees.find((record) => record.id == employee.employeeID)?.firstName }} {{
+                              props.employees.find((record) => record.id == employee.employeeID)?.lastName }}</div>
+                            <div class="pt-2 italic text-sm">{{ props.employees.find((record) => record.id ==
+                              employee.employeeID)?.number }}</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="px-6">
+                    <hr class="border-t border-solid border-gray-400 my-2">
+                  </div>
+                  <div>
+                    <table class="table-auto w-full rounded-md">
+                      <thead>
+                        <!-- First row of headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <th class="px-6 py-2 font-montserrat w-4/6">Service Name</th>
+                          <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
+                        <!-- Content row with the same formatting as headers -->
+                        <tr v-if="selectedLog !== null" v-for="service in jobOrderServices"
+                          class="bg-ghost-white text-savoy-blue">
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
+                            <div>{{ props.services.find((record) => record.id == service.serviceID)?.serviceName }}</div>
+                            <div class="pt-2 italic text-sm">{{ formatServiceID(service.serviceID) }}</div>
+                          </td>
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-1/5 text-right">{{
+                            parseFloat(service.amountPaid).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                          }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="px-6">
+                    <hr class="border-t border-solid border-gray-400 my-2">
+                  </div>
+                  <div>
+                    <table class="table-auto w-full rounded-md">
+                      <thead>
+                        <!-- First row of headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
+                          <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
+                          <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
+                        <!-- Content row with the same formatting as headers -->
+                        <tr v-if="selectedLog !== null" v-for="item in jobOrderItems"
+                          class="bg-ghost-white text-savoy-blue">
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
+                            <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
+                            <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
+                              item.itemID)?.itemSerialNumber }}</div>
+                          </td>
+                          <td class="px-4 py-2 font-montserrat text-gray-800 w-1/6 text-center">{{ item.quantityUsed }} {{
+                            props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-2/6 text-right">{{
+                            parseFloat(item.amountPaid).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="px-6 m-2">
+                  <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
+                    v-model="selectedLog.generalNotes" :disabled="true" />
+                </div>
+                <div className="flex flex-row justify-between">
+                  <div class="flex flex-row space-x-2">
+                    <Link type="button" v-if="selectedLog.jobOrderStatus == 'Ongoing'"
+                      className="px-6 py-2 text-white font-montserrat bg-savoy-blue font-bold rounded-md hover:bg-vista-blue transition-all duration-300 ease-in-out"
+                      :href="route('job_orders.edit', { jobOrder: selectedLog.id })">
+                    Edit
+                    </Link>
+                    <Link type="button"
+                      className="px-6 py-2 text-white font-montserrat bg-savoy-blue font-bold rounded-md hover:bg-vista-blue transition-all duration-300 ease-in-out"
+                      :href="route('job_orders.history', { jobOrder: selectedLog.id })">
+                    History Log
+                    </Link>
+                  </div>
+                  <div
+                    className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                    <div>Total:</div>
+                    <span>{{parseFloat(selectedLog.total).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </BreezeAuthenticatedLayout>
+</template>
+
+<style scoped>
+/* Add these styles for table customization */
+table {
+  font-family: noto-sans, sans-serif;
+  /* Use the defined noto-sans font */
+  overflow: hidden;
+  /* Hide any overflowing content */
+}
+
+/* Add styles for the table headings */
+th {
+  color: savoy-blue;
+  /* Use the color variable savoy-blue */
+}
+
+th.uppercase {
+  text-transform: uppercase;
+  /* Transform text to uppercase */
+}
+
+/* Add style for the table body background */
+tbody {
+  background-color: ghost-white;
+  /* Use the color variable ghost-white */
+}
+
+/* Add rounded corners to the entire table */
+table.rounded-md {
+  border-radius: 8px;
+  /* Adjust the border-radius as needed */
+}
+
+.link-back {
+  color: savoy-blue;
+  /* Use the color variable savoy-blue */
+  font-family: noto-sans, sans-serif;
+  /* Use the defined noto-sans font */
+}
+
+.scrollable {
+  height: 710px;
+  /* Adjusted height */
+  overflow-y: auto;
+}
+
+.scrollable-table {
+  height: 420px;
+  /* Adjusted height */
+  overflow-y: auto;
+}
+
+.comments {
+  height: 100px;
+  resize: none;
+}
+
+.comments-2 {
+  height: 50px;
+  resize: none;
+}
+
+/* Adjust the style for the sticky header */
+thead.sticky tr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}</style>

@@ -1,0 +1,58 @@
+<script setup>
+
+import { ref, defineEmits, onMounted } from 'vue';
+
+const confirmHovered = ref(false);
+const cancelHovered = ref(false);
+const emit = defineEmits();
+const closeModal = () => {
+    emit("close");
+    confirmHovered.value = false;
+    cancelHovered.value = false;
+}
+/*const confirmAction = () => {
+    emit("confirmSubmission", supplyOrderItemInstanceDupe);
+    closeModal();
+}*/
+</script>
+
+<template>
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="flex justify-center items-center h-screen z-50">
+        <div class="w-full">
+            <div class="mx-auto rounded-lg overflow-hidden bg-ghost-white">
+                <div class="bg-persian-red text-white p-4">
+                    <h2 class="text-2xl font-bold font-montserrat text-center">Duplicate Entry Detected</h2>
+                </div>
+                <div class="flex p-3 px-8 pt-4 pb-6 flex-col figtree">
+                    <div class="mb-2 text-lg font-montserrat text-justify leading-6">
+                        You cannot add an item that has already been added.
+                    </div>
+                    <div class="flex justify-center space-x-6 items-center pt-3">
+                        <button type="button" @click="closeModal" class="btn border border-persian-red bg-persian-red text-white rounded-md font-montserrat font-bold px-6 py-2
+               hover:bg-light-coral hover:border-light-coral transition-all duration-300 ease-in-out">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.bg-black {
+    background-color: black;
+    position: fixed;
+    z-index: 40;
+    /* Ensure the dimmed background is behind the modal (z-index 50) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+</style>
