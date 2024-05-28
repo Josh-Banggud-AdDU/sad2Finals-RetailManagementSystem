@@ -1,9 +1,12 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
+ 
+const page = usePage();
+const name = ref("");
 onMounted(() => {
-    const name = ref("");
-    name.value = $page.name ? $page.name : null;
+    name.value = page.props.name ? page.props.name : null;
+    console.log(name);
 })
 defineProps({
     canLogin: {
@@ -32,7 +35,7 @@ defineProps({
         <img :src="imagePath" alt="TJ Gear Marketing" class="w-fit h-fit mr-2" />
         <div v-if="canLogin" class="p-6 text-center">
             <Link
-                v-if="$page.props.auth.user"
+                v-if="page.props.auth.user"
                 :href="route('dashboard')"
                 class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                 >Dashboard</Link
@@ -42,7 +45,7 @@ defineProps({
                 <Link
                     :href="route('login')"
                     class="m-4 px-6 py-2 text-savoy-blue bg-ghost-white border-4 border-ghost-white text-4xl font-bold font-montserrat rounded-md focus:outline-none hover:text-ghost-white hover:bg-vista-blue hover:border-vista-blue transition-all duration-300 ease-in-out"
-                    >Log in</Link
+                    >Log In</Link
                 >
 
                 

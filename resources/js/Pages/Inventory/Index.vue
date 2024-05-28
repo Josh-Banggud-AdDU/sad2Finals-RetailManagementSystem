@@ -132,7 +132,7 @@ const filteredInventories = computed(() => {
                                 </div>
                                 <div class="absolute inset-0 opacity-75 rounded-lg"
                                     :class="{
-                                        'bg-gradient-to-r from-light-coral from-10%': item.itemQuantity == 0,
+                                        'bg-gradient-to-r from-persian-red from-10%': item.itemQuantity == 0,
                                         'bg-gradient-to-r from-saffron from-10%': item.itemQuantity < item.itemThreshold 
                                     }"></div>
                             </div>

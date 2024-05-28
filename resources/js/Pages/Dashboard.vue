@@ -26,7 +26,8 @@ const filterJO = computed(() => {
 const filterSales = computed(() => {
     const today = new Date().toISOString().split('T')[0];
     console.log(today);
-    const numberOf = props.sales.filter((sale) => sale.transactionDate === today).length;
+    const flattenedArray = props.sales.flat();
+    const numberOf = flattenedArray.filter((sale) => sale.salesDate === today).length;
     return numberOf;
 })
 </script>
@@ -39,10 +40,10 @@ const filterSales = computed(() => {
             <h2 class="font-semibold text-xl text-savoy-blue leading-tight">Dashboard</h2>
         </template>
 
-        <div class="py-6 grow">
-            <div class="h-full flex flex-col justify-between max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-6 h-full w-full flex flex-col">
+            <div class="h-full flex flex-col justify-between max-w-7xl mx-auto sm:px-6 lg:px-8 grow gap-4">
                 <!--Low Stock Preview-->
-                <div class="h-[812px] flex flex-row gap-4 w-full">
+                <div class="h-32 flex flex-row gap-4 w-full grow">
                     <div class="h-full flex flex-col w-1/2">
                         <div class="h-12 w-full text-center bg-persian-red rounded-md px-2 py-2 mb-2">
                             <span class="font-montserrat font-bold text-3xl text-ghost-white uppercase">No Supply:</span>
@@ -72,12 +73,12 @@ const filterSales = computed(() => {
                             </div>
                         </div>
                     </div>
-                    <div class="w-1/2 bg-vista-blue" style="height: 710px;">
+                    <div class="w-1/2">
                         <div class="h-12 text-center bg-saffron rounded-md px-2 py-2 mb-2">
                             <span class="font-montserrat font-bold text-3xl text-ghost-white uppercase">Low Supply:</span>
                         </div>
                         <div class="flex flex-col space-y-2">
-                            <div style="max-height: calc(90vh - 16rem);" class="overflow-y-auto ">
+                            <div class="overflow-y-auto ">
                                 <div v-for="item in filteredLowStock" :key="item.id">
                                     <div
                                         class="relative flex flex-col items-center w-full h-32 bg-ghost-white px-10 py-4 border-gray-200 rounded-lg mb-3">
@@ -104,7 +105,7 @@ const filterSales = computed(() => {
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 flex">
+                <div class="flex">
                     <!--Finance Preview-->
                     <table class="bg-ghost-white w-full rounded-md">
                         <thead class="font-bold font-montserrat">
@@ -165,33 +166,6 @@ table.rounded-md {
     /* Use the color variable savoy-blue */
     font-family: noto-sans, sans-serif;
     /* Use the defined noto-sans font */
-}
-
-.scrollable {
-    height: 300px;
-    overflow-y: auto;
-}
-
-.scrollable-2 {
-    height: 385px;
-    overflow-y: auto;
-}
-
-.newscrollable {
-    width: 1008px;
-    overflow-x: auto;
-}
-
-.scrollable-table {
-    height: 295px;
-    /* Adjusted height */
-    overflow-y: auto;
-}
-
-.scrollable-table-b {
-    height: 295x;
-    /* Adjusted height */
-    overflow-y: auto;
 }
 
 .comments {

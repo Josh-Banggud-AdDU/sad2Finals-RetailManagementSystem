@@ -333,7 +333,7 @@ onMounted( async () => {
             <ConfirmBackModal @confirmSubmission="exit" @close="closeWarning" />
         </div>
         <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8 min-h-full">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                     <div className="flex items-center justify-between">
                         <button type="button"
@@ -348,7 +348,7 @@ onMounted( async () => {
                         </Link>-->
                     </div>
                 </div>
-                <div class="overflow-hidden shadow-sm">
+                <div class="flex flex-col overflow-hidden shadow-sm grow">
                     <div class="p-6 bg-ghost-white noto-sans border-b border-gray-200 rounded-lg">
                         <form name="createForm" @submit.prevent="submit">
                             <div className="flex flex-col">
@@ -607,9 +607,9 @@ onMounted( async () => {
                         </form>
                     </div>
 
-                    <div class="mt-4 flex space-x-4">
-                        <div class="w-2/5 noto-sans border-b border-gray-200 rounded-lg overflow-y-auto">
-                            <table class="table-auto w-full overflow-hidden rounded-t-md">
+                    <div class="mt-4 flex space-x-4 grow">
+                        <div class="w-2/5 flex flex-col noto-sans border-b border-gray-200 rounded-lg overflow-y-auto">
+                            <table class="table-fixed w-full overflow-hidden rounded-t-md">
                                 <thead class="sticky top-0 bg-savoy-blue text-white uppercase">
                                     <tr>
                                         <th class="px-2 py-2 w-1/2 font-montserrat">Date Edited</th>
@@ -617,9 +617,9 @@ onMounted( async () => {
                                     </tr>
                                 </thead>
                             </table>
-                            <div class="scrollable-table bg-ghost-white rounded-bl-md">
-                                <table class="table-auto w-full overflow-hidden ">
-                                    <tbody class="bg-ghost-white">
+                            <div class="h-32 overflow-y-auto bg-ghost-white rounded-bl-md grow">
+                                <table class="table-fixed w-full overflow-hidden">
+                                    <tbody class="bg-ghost-white min-h-full">
                                         <tr v-for="log in reversedEditHistory" :key="log.id" @click="handleRowClick(log)"
                                             class="hover:bg-silver">
                                             <template v-if="log.transactionType !== ''">
@@ -637,22 +637,19 @@ onMounted( async () => {
                             </div>
                         </div>
 
-                        <div class="w-3/5 noto-sans border-b border-gray-200 rounded-lg overflow-y-auto">
-
+                        <div class="w-3/5 flex flex-col noto-sans border-b border-gray-200 rounded-lg overflow-y-auto">
                             <table class="table-auto w-full overflow-hidden rounded-t-md">
                                 <thead class="sticky top-0 bg-savoy-blue text-white uppercase">
                                     <tr>
-                                        <th class="px-2 py-2 w-2/6 font-montserrat">
-                                            <span class="inline-block pl-2 -ml-2">Quantity History</span>
+                                        <th class="px-2 py-2 w-3/6 font-montserrat">
+                                            Quantity History
                                         </th>
-                                        <th class="px-2 py-2 w-2/6 font-montserrat">Transaction Date</th>
-                                        <th class="px-2 py-2 w-2/6 font-montserrat">Transaction Time</th>
+                                        <th class="px-2 py-2 w-1/6 font-montserrat">Date</th>
+                                        <th class="px-2 py-2 w-1/6 font-montserrat">Time</th>
                                     </tr>
                                 </thead>
                             </table>
-
-
-                            <div class="scrollable-table bg-ghost-white rounded-bl-md">
+                            <div class="h-32 overflow-y-auto bg-ghost-white rounded-bl-md grow">
                                 <div v-if="reversedQuantityHistory.length === 0"
                                     class="flex items-center justify-center h-full">
                                     <!-- Placeholder content when no row is clicked -->
@@ -660,16 +657,17 @@ onMounted( async () => {
                                         No Quantity Change
                                     </div>
                                 </div>
-                                <div v-if="reversedQuantityHistory">
-                                    <table class="table-auto w-full overflow-hidden ">
-                                        <tbody class="bg-ghost-white">
+                                <div v-if="reversedQuantityHistory" class="h-full">
+                                    <table class="table-fixed w-full">
+                                        <tbody class="divide-y bg-ghost-white max-w-full min-h-full">
                                             <tr v-for="log in reversedQuantityHistory" :key="log.id">
                                                 <template v-if="log.transactionType !== ''">
-                                                    <td class="border-b px-2 py-2 w-2/6 text-left font-montserrat">{{
-                                                        log.generalNotes }}</td>
-                                                    <td class="border-b px-2 py-2 w-2/6 text-center font-montserrat">{{ new
+                                                    <td class="px-2 py-2 w-3/6 truncate text-left font-montserrat">
+                                                        {{ log.generalNotes }}
+                                                    </td>
+                                                    <td class="px-2 py-2 w-1/6 text-center font-montserrat">{{ new
                                                         Date(log.updated_at).toLocaleDateString() }}</td>
-                                                    <td class="border-b px-2 py-2 w-2/6 text-center font-montserrat">{{ new
+                                                    <td class="px-2 py-2 w-1/6 text-center font-montserrat">{{ new
                                                         Date(log.updated_at).toLocaleTimeString([], {
                                                             hour: 'numeric', minute:
                                                                 '2-digit'
@@ -735,12 +733,6 @@ table.rounded-md {
     /* Use the color variable savoy-blue */
     font-family: noto-sans, sans-serif;
     /* Use the defined noto-sans font */
-}
-
-.scrollable-table {
-    height: 340px;
-    /* Adjusted height */
-    overflow-y: auto;
 }
 
 .comments {

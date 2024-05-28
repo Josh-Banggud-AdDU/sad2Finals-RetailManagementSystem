@@ -37,7 +37,7 @@ const submit = async () => {
                 Record Cash In / Cash Out
             </h2>
         </template>
-        <div class="py-6">
+        <div class="py-6 w-full h-full">
             <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                     <div className="flex items-center justify-between">

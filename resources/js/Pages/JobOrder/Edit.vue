@@ -9,7 +9,7 @@ import WarningIncompleteModal from '@/Components/WarningIncompleteModal.vue';
 import ConfirmInputModal from '@/Components/ConfirmInputModal.vue';
 import ConfirmBackModal from '@/Components/ConfirmBackModal.vue';
 import JobOrderPaymentModal from '@/Components/JobOrderPayment.vue';
-import { ref, computed, onMounted, onUnmounted, defineEmits, reactive } from 'vue';
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
@@ -262,7 +262,7 @@ const closeInputCard = () => {
     console.log(jobOrderItems.value);
 }
 
-const emit = defineEmits();
+//const emit = defineEmits();
 const searchItem = ref("");
 const searchService = ref("");
 const searchEmployee = ref("");
@@ -590,8 +590,8 @@ const submit = async () => {
                 :newTotal="totalTotalSales" @sendPayment="receivePayment"
                 @close="closeWarning" className="absolute border-b border-gray-200 shadow-sm rounded-lg z-50"/>
         </div>
-        <div class="py-6 h-full ">
-            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full">
+        <div class="py-6 h-full w-full">
+            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full flex flex-col">
                 <div class="mb-4">
                     <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                         <div class="flex items-center justify-between">
@@ -608,64 +608,66 @@ const submit = async () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row gap-4 w-full space-x-2">
-                    <div class="w-3/5 h-full overflow-hidden p-4 bg-ghost-white rounded-md">
+                <div className="h-32 flex flex-row gap-4 w-full space-x-2 grow">
+                    <div class="w-3/5 flex flex-col bg-ghost-white rounded-md p-4 min-h-full max-h-full">
                         <div class="px-8 pb-2 pt-6 flex flex-col justify-between items-center">
-                            <div class="w-full flex">
-                                <div class="w-3/4 flex flex-col">
-                                    <div class="text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                                        Job Order #{{ props.jobOrders.id }}
-                                    </div>
-                                    <div class="flex flex-row gap-4 items-center text-lg font-montserrat font-bold px-1" :class="{
-                                        'text-saffron': form.jobOrderStatus == 'Ongoing',
-                                        'text-persian-red': form.jobOrderStatus == 'Cancelled',
-                                        'text-dark-pastel-green': form.jobOrderStatus == 'Done',
-                                    }">
-                                        Status:
-                                        <div className="relative flex flex-row gap-2 w-36" ref="statusRef">
-                                            <button type="button" @click="showStatusDropdown" 
-                                                class="self-center h-full transition-all transform active:-rotate-180 focus:-rotate-180 duration-300 ease-in-out">
-                                                <div class="w-5 h-5" :class="{
-                                                    'icon-container-3': form.jobOrderStatus == 'Ongoing',
-                                                    'icon-container-2': form.jobOrderStatus == 'Cancelled',
-                                                    'icon-container-4': form.jobOrderStatus == 'Done',
-                                                }">
-                                                    <font-awesome-icon :icon="['fas', 'caret-down']" class="icon-3 w-3 h-3" />
-                                                </div>
-                                            </button>
-                                            <div className="self-center">{{ form.jobOrderStatus }}</div>
-                                            <ul v-if="isVisible6"
-                                            className="absolute mt-8 w-full bg-ghost-white text-savoy-blue text-sm font-bold rounded-lg shadow-lg z-50 p-2">
-                                                <button type="button" v-for="choice in status" :key="choice.id"
-                                                    @click="selectStatus(choice.status)"
-                                                    @mouseover="choice.hovered = true" @mouseout="choice.hovered = false"
-                                                    :class="{ 'bg-ghost-white text-savoy-blue': !choice.hovered, 'bg-silver': choice.hovered }"
-                                                    class="pl-2 text-left w-full">
-                                                    {{ choice.status }}
+                            <div class="w-full flex flex-col">
+                                <div class="w-full flex">
+                                    <div class="w-3/4 flex flex-col">
+                                        <div class="text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                                            Job Order #{{ props.jobOrders.id }}
+                                        </div>
+                                        <div class="flex flex-row gap-4 items-center text-lg font-montserrat font-bold px-1" :class="{
+                                            'text-saffron': form.jobOrderStatus == 'Ongoing',
+                                            'text-persian-red': form.jobOrderStatus == 'Cancelled',
+                                            'text-dark-pastel-green': form.jobOrderStatus == 'Done',
+                                        }">
+                                            Status:
+                                            <div className="relative flex flex-row gap-2 w-36" ref="statusRef">
+                                                <button type="button" @click="showStatusDropdown" 
+                                                    class="self-center h-full transition-all transform active:-rotate-180 focus:-rotate-180 duration-300 ease-in-out">
+                                                    <div class="w-5 h-5" :class="{
+                                                        'icon-container-3': form.jobOrderStatus == 'Ongoing',
+                                                        'icon-container-2': form.jobOrderStatus == 'Cancelled',
+                                                        'icon-container-4': form.jobOrderStatus == 'Done',
+                                                    }">
+                                                        <font-awesome-icon :icon="['fas', 'caret-down']" class="icon-3 w-3 h-3" />
+                                                    </div>
                                                 </button>
-                                            </ul>
+                                                <div className="self-center">{{ form.jobOrderStatus }}</div>
+                                                <ul v-if="isVisible6"
+                                                className="absolute mt-8 w-full bg-ghost-white text-savoy-blue text-sm font-bold rounded-lg shadow-lg z-50 p-2">
+                                                    <button type="button" v-for="choice in status" :key="choice.id"
+                                                        @click="selectStatus(choice.status)"
+                                                        @mouseover="choice.hovered = true" @mouseout="choice.hovered = false"
+                                                        :class="{ 'bg-ghost-white text-savoy-blue': !choice.hovered, 'bg-silver': choice.hovered }"
+                                                        class="pl-2 text-left w-full">
+                                                        {{ choice.status }}
+                                                    </button>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-1/4 flex flex-col pt-1 items-end">
+                                        <div class="text-2xl font-montserrat font-bold text-right text-savoy-blue px-1">
+                                            {{ props.jobOrders.jobOrderDate }}</div>
+                                        <div class="text-lg text-right italic font-montserrat font-bold px-1" :class="{
+                                        'text-persian-red': props.jobOrders.paymentStatus == 'Unpaid',
+                                        'text-saffron': props.jobOrders.paymentStatus == 'Partially Paid',
+                                        'text-dark-pastel-green': props.jobOrders.paymentStatus == 'Fully Paid',
+                                        }">
+                                            {{ props.jobOrders.paymentStatus }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="w-1/4 flex flex-col pt-1 items-end">
-                                    <div class="text-2xl font-montserrat font-bold text-right text-savoy-blue px-1">
-                                        {{ props.jobOrders.jobOrderDate }}</div>
-                                    <div class="text-lg text-right italic font-montserrat font-bold px-1" :class="{
-                                    'text-persian-red': props.jobOrders.paymentStatus == 'Unpaid',
-                                    'text-saffron': props.jobOrders.paymentStatus == 'Partially Paid',
-                                    'text-dark-pastel-green': props.jobOrders.paymentStatus == 'Fully Paid',
-                                    }">
-                                        {{ props.jobOrders.paymentStatus }}
-                                    </div>
+                                <div class="w-full relative font-montserrat px-1">
+                                    <BreezeTextArea id="vehicleDetails" type="input" @input="checkVehicleDetails"
+                                        className="mt-1 px-2 py-1 rounded-md w-full comments-2 text-sm" placeholder="Vehicle Model, License Plate, Color, etc."
+                                        v-model="form.vehicleDetails" autofocus autocomplete="off"/>
+                                    <span className="error-message text-red-600 text-sm absolute top-full left-0 -mt-1" v-if="form.errors.vehicleDetails">
+                                        {{ form.errors.vehicleDetails }}
+                                    </span>
                                 </div>
-                            </div>
-                            <div class="w-full relative font-montserrat px-1">
-                                <BreezeTextArea id="vehicleDetails" type="input" @input="checkVehicleDetails"
-                                    className="mt-1 px-2 py-1 rounded-md w-full comments-2 text-sm" placeholder="Vehicle Model, License Plate, Color, etc."
-                                    v-model="form.vehicleDetails" autofocus autocomplete="off"/>
-                                <span className="error-message text-red-600 text-sm absolute top-full left-0 -mt-1" v-if="form.errors.vehicleDetails">
-                                    {{ form.errors.vehicleDetails }}
-                                </span>
                             </div>
                         </div>
                         <div class="px-6">

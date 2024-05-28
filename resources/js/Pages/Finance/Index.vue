@@ -228,11 +228,11 @@ const discrepancies = computed(() => {
   <BreezeAuthenticatedLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-savoy-blue leading-tight">
-        Manage General Finances
+        Manage Finances
       </h2>
     </template>
-    <div class="py-4">
-      <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-4 w-full h-full flex flex-col gap-4">
+      <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
           <div className="flex items-center justify-between">
             <Link
@@ -243,33 +243,30 @@ const discrepancies = computed(() => {
           </div>
         </div>
       </div>
-    </div>
-    <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="w-full flex items-center gap-4">
-        <Link
-          class="flex justify-center w-4/5 px-6 py-2 text-white bg-dark-pastel-green text-3xl font-black rounded-md focus:outline-none hover:bg-emerald transition-all duration-300 ease-in-out"
-          :href="route('cashflows.create')">
-        +
-        </Link>
+      <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="w-full flex items-center gap-4">
+          <Link
+            class="flex justify-center w-11/12 px-6 py-2 text-white bg-dark-pastel-green text-3xl font-black rounded-md focus:outline-none hover:bg-emerald transition-all duration-300 ease-in-out"
+            :href="route('cashflows.create')">
+          +
+          </Link>
 
-        <Link
-          class="flex justify-center w-1/5 px-6 py-2 text-white font-montserrat bg-dark-pastel-green text-lg font-bold rounded-md focus:outline-none hover:bg-emerald transition-all duration-300 ease-in-out"
-          :href="route('finances.print')">
-        <font-awesome-icon id="print" :icon="['fas', 'print']" class="icon w-5 h-5 p-2" />
-        </Link>
+          <Link
+            class="flex justify-center w-1/12 px-6 py-2 text-white font-montserrat bg-dark-pastel-green text-lg font-bold rounded-md focus:outline-none hover:bg-emerald transition-all duration-300 ease-in-out"
+            :href="route('finances.print')">
+          <font-awesome-icon id="print" :icon="['fas', 'print']" class="icon w-5 h-5 p-2" />
+          </Link>
+        </div>
       </div>
-    </div>
-
-    <div class="py-4">
-      <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="flex flex-row gap-4 w-full">
+      <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8 grow">
+        <div class="h-32 flex flex-row gap-4 w-full grow">
           <!-- Existing table -->
           <div class="flex flex-col space-y-4 w-2/5">
-            <div class="flex flex-row bg-savoy-blue rounded-lg">
+            <div class="flex flex-row w-full bg-savoy-blue rounded-lg">
               <div class="flex flex-row items-center py-1 px-2 bg-savoy-blue rounded-lg shadow-sm" ref="monthRef">
                 <div class="relative w-full">
                   <BreezeTextInput id="month" type="input" v-model="selectedMonthValue"
-                    class="my-1 px-2 py-1 block w-48 rounded-md figtree" @click="displayMonth = true" autofocus
+                    class="my-1 px-2 py-1 block w-full rounded-md figtree" @click="displayMonth = true" autofocus
                     readonly />
                   <!--v-model="month.label" @focus="searchEmployee" @blur="displayInvalid"-->
                   <ul v-if="displayMonth"
@@ -297,27 +294,20 @@ const discrepancies = computed(() => {
                   <font-awesome-icon :icon="['fas', 'plus']" class="icon w-4 h-4" />
                 </button>
               </div>
-              <!--
-              <select v-model="selectedMonth">
-                <option v-for="month in months" :key="month.value" :value="month.value">{{ month.label }}</option>
-              </select>-->
-
-              <!-- Input for the year -->
-              <!--<input type="number" v-model="selectedYear" :min="0" :max="maxAllowedYear" class="grow" />-->
             </div>
-            <div class="flex flex-col w-full bg-ghost-white rounded-md">
-              <table class="table-auto w-full overflow-hidden rounded-t-md">
+            <div class="flex flex-col w-full h-full bg-ghost-white rounded-md">
+              <table class="table-fixed w-full overflow-hidden rounded-t-md">
                 <thead class="sticky top-0 bg-savoy-blue text-white uppercase">
                   <tr>
-                    <th class="px-2 py-2 w-6/12 font-montserrat text-sm" colspan="2">Transaction Date & Time</th>
-                    <th class="py-2 w-3/12 font-montserrat text-sm">Transaction Type</th>
+                    <th class="py-2 w-6/12 font-montserrat" colspan="2">Date & Time</th>
+                    <th class="py-2 w-3/12 font-montserrat">Type</th>
                     <th class="px-2 py-2 w-3/12 font-montserrat">Amount</th>
                   </tr>
                 </thead>
               </table>
-              <div class="scrollable rounded-md">
-                <table class="table-auto w-full overflow-hidden">
-                  <tbody class="bg-ghost-white">
+              <div class="h-32 overflow-y-auto rounded-md grow">
+                <table class="table-fixed w-full overflow-hidden">
+                  <tbody class="bg-ghost-white min-h-full">
                     <tr v-for="log in reversedFinances" :key="log.id" @click="handleRowClick(log)"
                       class="hover:bg-silver">
                       <template v-if="log.transactionType !== ''">
@@ -336,16 +326,16 @@ const discrepancies = computed(() => {
             </div>
           </div>
           <!-- New table -->
-          <div class="relative w-3/5">
-            <div class="bg-ghost-white rounded-md p-4" style="height: 645px;">
-              <div v-if="selectedLog === null" class="flex items-center justify-center h-full">
+          <div class="h-full w-3/5 grow">
+            <div class="flex flex-col bg-ghost-white rounded-md p-4 min-h-full max-h-full">
+              <div v-if="selectedLog === null" class="flex items-center justify-center grow">
                 <!-- Placeholder content when no row is clicked -->
                 <div class="text-5xl font-montserrat text-savoy-blue" style="color: #BFBFBF;">
-                  Finance Preview
+                  Transaction Preview
                 </div>
               </div>
               <!--Preview for JO-->
-              <div v-if="selectedLog && selectedLog.jobOrderID">
+              <div v-if="selectedLog && selectedLog.jobOrderID" class="flex flex-col grow min-h-full max-h-full">
                 <div class="px-8 pb-2 pt-6 flex flex-col justify-between items-center">
                   <div class="w-full flex">
                     <div class="w-3/4 flex flex-col">
@@ -381,53 +371,57 @@ const discrepancies = computed(() => {
                 <div class="px-6">
                   <hr class="border-t border-solid border-gray-400 my-2">
                 </div>
-                <div class="scrollable-table">
-                  <table class="table-auto w-full rounded-md">
-                    <thead>
-                      <!-- First row of headers -->
-                      <tr class="bg-ghost-white text-savoy-blue">
-                        <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
-                        <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
-                        <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
-                      <!-- Content row with the same formatting as headers -->
-                      <tr v-if="selectedLog !== null" v-for="item in jobOrderItems"
-                        class="bg-ghost-white text-savoy-blue">
-                        <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
-                          <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
-                          <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
-                            item.itemID)?.itemSerialNumber }}</div>
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-gray-800 w-1/6 text-center">{{ item.quantityUsed }} {{
-                          props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
-                        <td class="px-6 py-2 font-montserrat text-gray-800 w-2/6 text-right">{{
-                          parseFloat(item.amountPaid).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="min-h-full max-h-full grow flex flex-col gap-2 justify-between">
+                  <div class="h-32 overflow-y-auto grow flex flex-col">
+                    <table class="table-fixed w-full rounded-md">
+                      <thead>
+                        <!-- First row of headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
+                          <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
+                          <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
+                        <!-- Content row with the same formatting as headers -->
+                        <tr v-if="selectedLog !== null" v-for="item in jobOrderItems"
+                          class="bg-ghost-white text-savoy-blue">
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
+                            <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
+                            <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
+                              item.itemID)?.itemSerialNumber }}</div>
+                          </td>
+                          <td class="px-4 py-2 font-montserrat text-gray-800 w-1/6 text-center">{{ item.quantityUsed }} {{
+                            props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-2/6 text-right">{{
+                            parseFloat(item.amountPaid).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="px-6 mt-2 mx-2">
-                  <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
-                    v-model="selectedLogDetails.generalNotes" :disabled="true" />
-                </div>
-                <div class="mt-2">
-                  <div className="flex flex-row w-full justify-end">
-                    <div
-                      className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                      <div>Total:</div>
-                      <span>{{ parseFloat(selectedLogDetails.profit).toLocaleString('en-PH', {
-                        style: 'currency', currency:
-                          'PHP'
-                      }) }}</span>
+                <div>
+                  <div class="px-6 mt-2 mx-2">
+                    <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
+                      v-model="selectedLogDetails.generalNotes" :disabled="true" />
+                  </div>
+                  <div class="mt-2">
+                    <div className="flex flex-row w-full justify-end">
+                      <div
+                        className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                        <div>Total:</div>
+                        <span>{{ parseFloat(selectedLogDetails.profit).toLocaleString('en-PH', {
+                          style: 'currency', currency:
+                            'PHP'
+                        }) }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <!--Preview for Sales-->
-              <div v-if="selectedLog && selectedLog.salesID">
+              <div v-if="selectedLog && selectedLog.salesID" class="flex flex-col grow min-h-full max-h-full">
                 <div class="px-8 pb-2 pt-6 flex justify-between items-center">
                   <div class="w-full flex">
                     <div class="w-3/4 flex flex-col">
@@ -445,77 +439,85 @@ const discrepancies = computed(() => {
                 <div class="px-6">
                   <hr class="border-t border-solid border-gray-400 my-2">
                 </div>
-                <div class="mb-2 scrollable-2">
-                  <table class="table-auto w-full text-center rounded-md newscrollable">
-                    <thead>
-                      <tr class="text-savoy-blue leading-4">
-                        <th class="px-4 py-2 font-montserrat w-64">Item Name</th>
-                        <th class="px-4 py-2 font-montserrat w-32">SRP</th>
-                        <th class="px-4 py-2 font-montserrat w-28">Quantity</th>
-                        <th class="px-4 py-2 font-montserrat w-32">Amount Due</th>
-                        <th class="px-4 py-2 font-montserrat w-32">Subtotal</th>
-                        <th class="px-4 py-2 font-montserrat w-32"><span>Discounted Price</span></th>
-                        <th class="px-4 py-2 font-montserrat w-32">Net Gain</th>
-                      </tr>
-                    </thead>
-                  </table>
-                  <table class="table-auto text-center w-full newscrollable">
-                    <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
-                      <tr v-if="selectedLog !== null" v-for="item in salesItems" class="bg-ghost-white">
-                        <td class="px-4 py-2 text-left font-montserrat w-64">
-                          <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
-                          <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
-                            item.itemID)?.itemSerialNumber }}</div>
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-right w-32">
-                          {{ props.inventories.find((inventory) => inventory.id ==
-                            item.itemID)?.itemSRP.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
-                        </td>
-                        <td class="px-4 py-2 font-montserrat w-28">
-                          {{ item.quantitySold }} {{ props.inventories.find((inventory) => inventory.id ==
-                            item.itemID)?.itemUnit }}.
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-right w-32">
-                          {{ (item.quantitySold * props.inventories.find((inventory) => inventory.id ==
-                            item.itemID)?.itemSRP).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-right w-32">
-                          {{ item.amountPaid.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-right w-32">
-                          {{ (item.amountPaid / item.quantitySold).toLocaleString('en-PH', {
-                            style: 'currency', currency:
-                              'PHP'
-                          }) }}
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-right w-32">
-                          {{ ((item.amountPaid / item.quantitySold) - props.inventories.find((inventory) => inventory.id
-                            == item.itemID)?.itemCostPrice).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
-                          }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="min-h-full max-h-full grow flex flex-col gap-2 justify-between">
+                  <div class="grow flex flex-col overflow-x-auto overflow-y-hidden">
+                    <div class="min-w-fit grow flex flex-col overflow-x-auto overflow-y-hidden">
+                      <table class="table-fixed w-full text-center rounded-md overflow-x-auto">
+                        <thead>
+                          <tr class="text-savoy-blue leading-4">
+                            <th class="px-4 py-2 font-montserrat w-64">Item Name</th>
+                            <th class="px-4 py-2 font-montserrat w-32">SRP</th>
+                            <th class="px-4 py-2 font-montserrat w-28">Quantity</th>
+                            <th class="px-4 py-2 font-montserrat w-32">Amount Due</th>
+                            <th class="px-4 py-2 font-montserrat w-32">Subtotal</th>
+                            <th class="px-4 py-2 font-montserrat w-32"><span>Discounted Price</span></th>
+                            <th class="px-4 py-2 font-montserrat w-32">Net Gain</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      <div class="h-32 w-full overflow-y-auto grow">
+                        <table class="px-6 table-fixed text-center w-full">
+                          <tbody class="min-h-full">
+                            <tr v-if="selectedLog !== null" v-for="item in salesItems" class="bg-ghost-white">
+                              <td class="px-4 py-2 text-left font-montserrat w-64">
+                                <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
+                                <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemSerialNumber }}</div>
+                              </td>
+                              <td class="px-4 py-2 font-montserrat text-right w-32">
+                                {{ props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemSRP.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                              </td>
+                              <td class="px-4 py-2 font-montserrat w-28">
+                                {{ item.quantitySold }} {{ props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemUnit }}.
+                              </td>
+                              <td class="px-4 py-2 font-montserrat text-right w-32">
+                                {{ (item.quantitySold * props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemSRP).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                              </td>
+                              <td class="px-4 py-2 font-montserrat text-right w-32">
+                                {{ item.amountPaid.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                              </td>
+                              <td class="px-4 py-2 font-montserrat text-right w-32">
+                                {{ (item.amountPaid / item.quantitySold).toLocaleString('en-PH', {
+                                  style: 'currency', currency:
+                                    'PHP'
+                                }) }}
+                              </td>
+                              <td class="px-4 py-2 font-montserrat text-right w-32">
+                                {{ ((item.amountPaid / item.quantitySold) - props.inventories.find((inventory) => inventory.id
+                                  == item.itemID)?.itemCostPrice).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                                }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="px-6 mb-2 mx-2">
-                  <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
-                    v-model="selectedLogDetails.generalNotes" :disabled="true" />
-                </div>
-                <div class="mt-2">
-                  <div className="flex flex-row w-full justify-end">
-                    <div
-                      className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                      <div>Total:</div>
-                      <span>{{ parseFloat(selectedLogDetails.totalSales).toLocaleString('en-PH', {
-                        style: 'currency', currency:
-                          'PHP'
-                      }) }}</span>
+                <div>
+                  <div class="px-6 mb-2 mx-2">
+                    <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
+                      v-model="selectedLogDetails.generalNotes" :disabled="true" />
+                  </div>
+                  <div class="mt-2">
+                    <div className="flex flex-row w-full justify-end">
+                      <div
+                        className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                        <div>Total:</div>
+                        <span>{{ parseFloat(selectedLogDetails.totalSales).toLocaleString('en-PH', {
+                          style: 'currency', currency:
+                            'PHP'
+                        }) }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <!--Preview for Cashflow-->
-              <div v-if="selectedLog && selectedLog.cashflowID">
+              <div v-if="selectedLog && selectedLog.cashflowID" class="flex flex-col grow min-h-full max-h-full">
                 <div class="px-8 pb-2 pt-6 flex flex-col justify-between items-center">
                   <div class="w-full flex">
                     <div class="w-3/4 flex flex-col">
@@ -532,25 +534,27 @@ const discrepancies = computed(() => {
                 <div class="px-6">
                   <hr class="border-t border-solid border-gray-400 my-2">
                 </div>
-                <div class="scrollable-table-b">
-                  <table class="table-auto w-full rounded-md">
-                    <thead>
-                      <!-- First row of headers -->
-                      <tr class="bg-ghost-white text-savoy-blue">
-                        <th class="px-6 py-2 font-montserrat w-3/4">Cashflow Type</th>
-                        <th class="px-6 py-2 font-montserrat w-1/4">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
-                      <!-- Content row with the same formatting as headers -->
-                      <tr class="bg-ghost-white text-savoy-blue">
-                        <td class="px-6 py-2 font-montserrat text-gray-800 w-3/4">
-                          <div>{{selectedLogDetails.transactionType}}</div>
-                        </td>
-                        <td class="px-4 py-2 font-montserrat text-gray-800 w-1/4 text-center">{{parseFloat(selectedLogDetails.amount).toLocaleString('en-PH',{style:'currency', currency:'PHP'})}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="min-h-full max-h-full grow flex flex-col gap-2 justify-between">
+                  <div class="flex flex-col grow">
+                    <table class="table-auto w-full rounded-md">
+                      <thead>
+                        <!-- First row of headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <th class="px-6 py-2 font-montserrat w-3/4">Cashflow Type</th>
+                          <th class="px-6 py-2 font-montserrat w-1/4">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto">
+                        <!-- Content row with the same formatting as headers -->
+                        <tr class="bg-ghost-white text-savoy-blue">
+                          <td class="px-6 py-2 font-montserrat text-gray-800 w-3/4">
+                            <div>{{selectedLogDetails.transactionType}}</div>
+                          </td>
+                          <td class="px-4 py-2 font-montserrat text-gray-800 w-1/4 text-center">{{parseFloat(selectedLogDetails.amount).toLocaleString('en-PH',{style:'currency', currency:'PHP'})}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div class="px-6 mt-2 mx-2">
                   <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
@@ -653,33 +657,6 @@ table.rounded-md {
   /* Use the color variable savoy-blue */
   font-family: noto-sans, sans-serif;
   /* Use the defined noto-sans font */
-}
-
-.scrollable {
-  height: 525px;
-  overflow-y: auto;
-}
-
-.scrollable-2 {
-  height: 385px;
-  overflow-y: auto;
-}
-
-.newscrollable {
-  width: 1008px;
-  overflow-x: auto;
-}
-
-.scrollable-table {
-  height: 295px;
-  /* Adjusted height */
-  overflow-y: auto;
-}
-
-.scrollable-table-b {
-  height: 380px;
-  /* Adjusted height */
-  overflow-y: auto;
 }
 
 .comments {

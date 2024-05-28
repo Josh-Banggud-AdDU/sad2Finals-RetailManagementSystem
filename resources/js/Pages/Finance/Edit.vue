@@ -6,6 +6,7 @@ import WarningIncompleteModal from '@/Components/WarningIncompleteModal.vue';
 import ConfirmInputModal from '@/Components/ConfirmInputModal.vue';
 import ConfirmBackModal from '@/Components/ConfirmBackModal.vue';
 import { Head, Link, useForm, defineProps } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
 import { onMounted, ref, reactive } from 'vue';
 import axios from 'axios';
 
@@ -903,8 +904,8 @@ const exit = () => {
         <div v-if="isVisible5" class="fixed inset-0 flex items-center justify-center z-50">
             <ConfirmBackModal @confirmSubmission="exit" @close="closeWarning" />
         </div>
-        <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-6 w-full h-full flex flex-col gap-4">
+            <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                     <div className="flex items-center justify-between">
                         <button type="button" @click="isVisible5 = true"
@@ -912,338 +913,326 @@ const exit = () => {
                             >
                             Back
                         </button>
-                        <!--<Link
-                            class="px-6 py-2 text-white bg-savoy-blue font-bold font-montserrat rounded-md focus:outline-none hover:bg-vista-blue transition-all duration-300 ease-in-out"
-                            :href="route('cash_on_hands.index')">
-                        Back
-                        </Link>-->
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="flex flex-col space-y-4 max-w-7xl gap-4 mx-auto sm:px-6 lg:px-8">
-            <form name="createForm" @submit.prevent="submit">
-                <table class="w-full bg-savoy-blue rounded-t-md">
-                    <thead class="text-2xl text-white font-bold font-montserrat">
-                        <tr>
-                            <th class="px-2 py-2 w-2/6" rowspan="2">Cash</th>
-                            <th class="px-2 py-2 w-4/6" colspan="4">On Hand</th>
-                        </tr>
-                        <tr>
-                            <th class="text-xl w-1/6">10 (Pc/s)</th>
-                            <th class="text-xl w-1/6"></th>
-                            <th class="text-xl w-1/6">1 (Pc/s)</th>
-                            <th class="text-xl w-1/6"></th>
-                        </tr>
-                    </thead>
-                </table>
-                <table class = "w-full rounded-b-md bg-ghost-white">
-                    <tbody class="text-center font-montserrat">
-                        <!--onethousand-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[0]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1000Tens" v-model="initialForm.thousandsTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.thousandsTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1000Ones" v-model="initialForm.thousandsOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.thousandsOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--fivehundred-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[1]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="500Tens" v-model="initialForm.fiveHundredsTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveHundredsTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="500Ones" v-model="initialForm.fiveHundredsOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveHundredsOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--twohundred-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[2]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="200Tens" v-model="initialForm.twoHundredsTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twoHundredsTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="200Ones" v-model="initialForm.twoHundredsOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twoHundredsOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--onehundred-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[3]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="100Tens" v-model="initialForm.oneHundredsTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneHundredsTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="100Ones" v-model="initialForm.oneHundredsOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneHundredsOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--fifty-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[4]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="50Tens" v-model="initialForm.fiftiesTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiftiesTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="50Ones" v-model="initialForm.fiftiesOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiftiesOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--twenty-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[5]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="20Tens" v-model="initialForm.twentiesTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentiesTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="20Ones" v-model="initialForm.twentiesOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentiesOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--ten-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[6]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="10Tens" v-model="initialForm.tensTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tensTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="10Ones" v-model="initialForm.tensOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tensOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--five-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[7]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="5Tens" v-model="initialForm.fivesTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fivesTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="5Ones" v-model="initialForm.fivesOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fivesOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--one-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[8]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1Tens" v-model="initialForm.onesTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.onesTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1Ones" v-model="initialForm.onesOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.onesOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--twentyfivecents-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[9]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="25cTens" v-model="initialForm.twentyFiveCentavosTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentyFiveCentavosTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="25cOnes" v-model="initialForm.twentyFiveCentavosOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentyFiveCentavosOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--tencents-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[10]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="10cTens" v-model="initialForm.tenCentavosTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tenCentavosTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="10cOnes" v-model="initialForm.tenCentavosOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tenCentavosOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--fivecents-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[11]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="5cTens" v-model="initialForm.fiveCentavosTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveCentavosTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="5cOnes" v-model="initialForm.fiveCentavosOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveCentavosOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!--oncents-->
-                        <tr>
-                            <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
-                                parseFloat(cashValues[12]).toLocaleString('en-PH',
-                                    {
-                                        style: 'currency', currency: 'PHP'
-                                    }) }}
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1cTens" v-model="initialForm.oneCentavosTens" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneCentavosTens}}</div>
-                                </div>
-                            </td>
-                            <td class="border-r border-silver w-2/6">
-                                <div class="flex flex-row items-center justify-center px-1 ">
-                                    <BreezeTextInput id="1cOnes" v-model="initialForm.oneCentavosOnes" type="input" @input="displayInvalid"
-                                        class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
-                                        <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneCentavosOnes}}</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-        <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="w-full flex flex-col space-y-4 max-w-7xl gap-4 mx-auto sm:px-6 lg:px-8">
+                <form name="createForm" @submit.prevent="submit">
+                    <table class="w-full bg-savoy-blue rounded-t-md">
+                        <thead class="text-2xl text-white font-bold font-montserrat">
+                            <tr>
+                                <th class="px-2 py-2 w-2/6">Cash</th>
+                                <th class="px-2 py-2 w-2/6">10 pcs</th>
+                                <th class="px-2 py-2 w-2/6">1 pcs</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class = "w-full rounded-b-md bg-ghost-white">
+                        <tbody class="text-center font-montserrat">
+                            <!--onethousand-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[0]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1000Tens" v-model="initialForm.thousandsTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.thousandsTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1000Ones" v-model="initialForm.thousandsOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.thousandsOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--fivehundred-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[1]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="500Tens" v-model="initialForm.fiveHundredsTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveHundredsTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="500Ones" v-model="initialForm.fiveHundredsOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveHundredsOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--twohundred-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[2]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="200Tens" v-model="initialForm.twoHundredsTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twoHundredsTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="200Ones" v-model="initialForm.twoHundredsOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twoHundredsOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--onehundred-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[3]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="100Tens" v-model="initialForm.oneHundredsTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneHundredsTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="100Ones" v-model="initialForm.oneHundredsOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneHundredsOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--fifty-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[4]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="50Tens" v-model="initialForm.fiftiesTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiftiesTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="50Ones" v-model="initialForm.fiftiesOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiftiesOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--twenty-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[5]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="20Tens" v-model="initialForm.twentiesTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentiesTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="20Ones" v-model="initialForm.twentiesOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentiesOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--ten-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[6]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="10Tens" v-model="initialForm.tensTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tensTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="10Ones" v-model="initialForm.tensOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tensOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--five-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[7]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="5Tens" v-model="initialForm.fivesTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fivesTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="5Ones" v-model="initialForm.fivesOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fivesOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--one-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[8]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1Tens" v-model="initialForm.onesTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.onesTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1Ones" v-model="initialForm.onesOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.onesOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--twentyfivecents-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[9]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="25cTens" v-model="initialForm.twentyFiveCentavosTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentyFiveCentavosTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="25cOnes" v-model="initialForm.twentyFiveCentavosOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.twentyFiveCentavosOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--tencents-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[10]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="10cTens" v-model="initialForm.tenCentavosTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tenCentavosTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="10cOnes" v-model="initialForm.tenCentavosOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.tenCentavosOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--fivecents-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[11]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="5cTens" v-model="initialForm.fiveCentavosTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveCentavosTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="5cOnes" v-model="initialForm.fiveCentavosOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.fiveCentavosOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--oncents-->
+                            <tr>
+                                <td class="text-xl tracking-wide text-right px-2 py-1 border-r font-bold border-silver w-2/6">{{
+                                    parseFloat(cashValues[12]).toLocaleString('en-PH',
+                                        {
+                                            style: 'currency', currency: 'PHP'
+                                        }) }}
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1cTens" v-model="initialForm.oneCentavosTens" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneCentavosTens}}</div>
+                                    </div>
+                                </td>
+                                <td class="border-r border-silver w-2/6">
+                                    <div class="flex flex-row items-center justify-center px-1 ">
+                                        <BreezeTextInput id="1cOnes" v-model="initialForm.oneCentavosOnes" type="input" @input="displayInvalid"
+                                            class="text-lg text-center m-1 px-2 py-1 block w-3/6" autocomplete="off" />
+                                            <div class="w-3/6 px-1 text-sm text-left text-persian-red">{{form.errors.oneCentavosOnes}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg flex justify-end gap-4">
                 <button type="button" @click="submit"
                     className="px-6 py-2 text-white bg-savoy-blue font-bold font-montserrat rounded-md focus:outline-none hover:bg-vista-blue">

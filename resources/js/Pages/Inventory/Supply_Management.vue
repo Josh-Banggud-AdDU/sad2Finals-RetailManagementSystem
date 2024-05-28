@@ -59,8 +59,8 @@ const calculateReturn = () => {
         Manage Supply
       </h2>
     </template>
-    <div class="py-6">
-      <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 w-full flex">
+      <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8 grow">
         <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
           <div class="flex items-center justify-between">
             <Link
@@ -93,10 +93,10 @@ const calculateReturn = () => {
             </Link>
           </div>
         </div>
-        <div class="flex flex-row gap-4 w-full">
+        <div class="h-32 flex flex-row gap-4 w-full grow">
           <!-- Existing table -->
-          <div class="w-2/5 bg-ghost-white rounded-md">
-            <table class="table-auto w-full overflow-hidden rounded-t-md">
+          <div class="w-2/5 flex flex-col bg-ghost-white rounded-md">
+            <table class="table-fixed w-full overflow-hidden rounded-t-md">
               <thead class="sticky top-0 bg-savoy-blue text-white uppercase">
                 <tr>
                   <th class="px-2 py-2 w-1/4 font-montserrat">Transaction Date</th>
@@ -106,9 +106,9 @@ const calculateReturn = () => {
                 </tr>
               </thead>
             </table>
-            <div class="scrollable-table rounded-md">
-              <table class="table-auto w-full overflow-hidden ">
-                <tbody class="bg-ghost-white">
+            <div class="h-32 overflow-y-auto rounded-md grow">
+              <table class="table-fixed w-full overflow-hidden ">
+                <tbody class="bg-ghost-white min-h-full">
                   <tr v-for="log in reversedLogs" :key="log.id" @click="handleRowClick(log)" class="hover:bg-silver">
                     <template v-if="log.transactionType !== ''">
                       <td class="border-b px-2 py-2 max-w-xs text-center font-montserrat">{{ log.transactionDate }}</td>
@@ -124,15 +124,15 @@ const calculateReturn = () => {
             </div>
           </div>
           <!-- New table -->
-          <div class="w-3/5">
-            <div class="bg-ghost-white rounded-md p-4" style="height: 720px;">
-              <div v-if="selectedLog === null" class="flex items-center justify-center h-full">
+          <div class="h-full w-3/5 grow">
+            <div class="flex flex-col bg-ghost-white rounded-md p-4 min-h-full max-h-full">
+              <div v-if="selectedLog === null" class="flex items-center justify-center grow">
                 <!-- Placeholder content when no row is clicked -->
                 <div class="text-5xl font-montserrat text-savoy-blue" style="color: #BFBFBF;">
                   Supply Log Preview
                 </div>
               </div>
-              <div v-if="selectedLog !== null">
+              <div v-if="selectedLog !== null" class="flex flex-col grow min-h-full max-h-full">
                 <!-- Content to be displayed when a row is clicked -->
                 <div class="px-8 pb-2 pt-6 flex justify-between items-center">
                   <div class="w-full flex">
@@ -166,88 +166,94 @@ const calculateReturn = () => {
                 <div class="px-6">
                   <hr class="border-t border-solid border-gray-400 my-2">
                 </div>
-                <!--Stock In & Stock Out Details-->
-                <div v-if="selectedLog.transactionType != 'Item Return'">
-                  <table class="px-6 table-auto w-full rounded-md">
-                    <thead>
-                      <!-- First row of headers -->
-                      <tr class="bg-ghost-white text-savoy-blue">
-                        <th class="px-6 py-2 font-montserrat w-4/5">Item Name</th>
-                        <th class="px-6 py-2 font-montserrat w-1/5">Quantity</th>
-                      </tr>
-                    </thead>
-                  </table>
-                  <div class="scrollable">
-                    <table class="px-6 table-auto w-full">
-                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto ">
-                        <!-- Content row with the same formatting as headers -->
-                        <tr v-if="selectedLog !== null" v-for="item in supplyOrderItems"
-                          class="bg-ghost-white text-savoy-blue">
-                          <td class="px-6 py-2 font-montserrat text-gray-800 w-4/5">
-                            <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
-                            <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
-                              item.itemID)?.itemSerialNumber }}</div>
-                          </td>
-                          <td class="px-6 py-2 font-montserrat text-gray-800 w-1/5 text-center">{{ item.quantity }} {{
-                            props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <div class="min-h-full max-h-full grow flex flex-col gap-2 justify-between">
+                  <div class="grow flex flex-col">
+                    <!--Stock In & Stock Out Details-->
+                    <div v-if="selectedLog.transactionType != 'Item Return'" class="flex flex-col grow">
+                      <table class="px-6 table-fixed w-full rounded-md">
+                        <thead>
+                          <!-- First row of headers -->
+                          <tr class="bg-ghost-white text-savoy-blue">
+                            <th class="px-6 py-2 font-montserrat w-4/5">Item Name</th>
+                            <th class="px-6 py-2 font-montserrat w-1/5">Quantity</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      <div class="h-32 overflow-y-auto grow">
+                        <table class="px-6 table-fixed w-full overflow-hidden">
+                          <tbody class="bg-ghost-white min-h-full">
+                            <!-- Content row with the same formatting as headers -->
+                            <tr v-if="selectedLog !== null" v-for="item in supplyOrderItems"
+                              class="bg-ghost-white text-savoy-blue">
+                              <td class="px-6 py-2 font-montserrat text-gray-800 w-4/5">
+                                <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
+                                <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemSerialNumber }}</div>
+                              </td>
+                              <td class="px-6 py-2 font-montserrat text-gray-800 w-1/5 text-center">{{ item.quantity }} {{
+                                props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!--Item Return Details-->
+                    <div v-if="selectedLog.transactionType == 'Item Return'" class="flex flex-col grow">
+                      <table class="px-6 table-fixed w-full rounded-md">
+                        <thead>
+                          <!-- First row of headers -->
+                          <tr class="bg-ghost-white text-savoy-blue">
+                            <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
+                            <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
+                            <th class="px-6 py-2 font-montserrat w-2/6">Amount Returned</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      <div class="h-32 overflow-y-auto grow">
+                        <table class="px-6 table-fixed w-full overflow-hidden">
+                          <tbody class="bg-ghost-white min-h-full">
+                            <!-- Content row with the same formatting as headers -->
+                            <tr v-if="selectedLog !== null" v-for="item in supplyOrderItems"
+                              class="text-savoy-blue">
+                              <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
+                                <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
+                                <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
+                                  item.itemID)?.itemSerialNumber }}</div>
+                              </td>
+                              <td class="px-6 py-2 font-montserrat text-gray-800 w-1/6 text-center">{{ item.quantity }} {{
+                                props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
+                              <td class="px-6 py-2 font-montserrat text-gray-800 w-2/6 text-right">{{
+                                parseFloat(item.quantity * (props.salesItems.find((sale) => sale.salesID ==
+                                  selectedLog.salesID && sale.itemID == item.itemID)?.amountPaid
+                                  / props.salesItems.find((sale) => sale.salesID == selectedLog.salesID && sale.itemID ==
+                                    item.itemID)?.quantitySold)).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                              }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <!--Item Return Details-->
-                <div v-if="selectedLog.transactionType == 'Item Return'">
-                  <table class="px-6 table-auto w-full rounded-md">
-                    <thead>
-                      <!-- First row of headers -->
-                      <tr class="bg-ghost-white text-savoy-blue">
-                        <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
-                        <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
-                        <th class="px-6 py-2 font-montserrat w-2/6">Amount Returned</th>
-                      </tr>
-                    </thead>
-                  </table>
-                  <div class="scrollable-2">
-                    <table class="px-6 table-auto w-full">
-                      <tbody class="bg-ghost-white max-h-500 overflow-y-auto ">
-                        <!-- Content row with the same formatting as headers -->
-                        <tr v-if="selectedLog !== null" v-for="item in supplyOrderItems"
-                          class="bg-ghost-white text-savoy-blue">
-                          <td class="px-6 py-2 font-montserrat text-gray-800 w-3/6">
-                            <div>{{ props.inventories.find((inventory) => inventory.id == item.itemID)?.itemName }}</div>
-                            <div class="pt-2 italic text-sm">{{ props.inventories.find((inventory) => inventory.id ==
-                              item.itemID)?.itemSerialNumber }}</div>
-                          </td>
-                          <td class="px-6 py-2 font-montserrat text-gray-800 w-1/6 text-center">{{ item.quantity }} {{
-                            props.inventories.find((inventory) => inventory.id == item.itemID)?.itemUnit }}.</td>
-                          <td class="px-6 py-2 font-montserrat text-gray-800 w-2/6 text-right">{{
-                            parseFloat(item.quantity * (props.salesItems.find((sale) => sale.salesID ==
-                              selectedLog.salesID && sale.itemID == item.itemID)?.amountPaid
-                              / props.salesItems.find((sale) => sale.salesID == selectedLog.salesID && sale.itemID ==
-                                item.itemID)?.quantitySold)).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
-                          }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="px-6 m-2">
-                  <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
-                    v-model="selectedLog.generalNotes" :disabled="true" />
-                </div>
-                <div v-if="selectedLog.transactionType == 'Item Return'" className="flex flex-row justify-between">
-                  <button type="submit" @click="submit"
-                    className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
-                    Save
-                  </button>
-                  <div
-                    className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                    <div>Total:</div>
-                    <span>{{ parseFloat(returnCash ? returnCash : 0).toLocaleString('en-PH', {
-                      style: 'currency', currency:
-                        'PHP'
-                    }) }}
-                    </span>
+                  <div>
+                    <div class="px-6 m-2">
+                      <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments"
+                        v-model="selectedLog.generalNotes" :disabled="true" />
+                    </div>
+                    <div v-if="selectedLog.transactionType == 'Item Return'" className="flex flex-row justify-between">
+                      <button type="submit" @click="submit"
+                        className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
+                        Save
+                      </button>
+                      <div
+                        className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                        <div>Total:</div>
+                        <span>{{ parseFloat(returnCash ? returnCash : 0).toLocaleString('en-PH', {
+                          style: 'currency', currency:
+                            'PHP'
+                        }) }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -305,12 +311,6 @@ table.rounded-md {
 
 .scrollable-2 {
   height: 350px;
-  overflow-y: auto;
-}
-
-.scrollable-table {
-  height: 680px;
-  /* Adjusted height */
   overflow-y: auto;
 }
 

@@ -152,11 +152,11 @@ const data = reactive({
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-savoy-blue leading-tight">
-                View Cash on Hand
+                Cash on Hand
             </h2>
         </template>
-        <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-6 w-full flex flex-col gap-4">
+            <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                     <div className="flex items-center justify-between">
                         <Link
@@ -167,407 +167,402 @@ const data = reactive({
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="flex flex-col space-y-4 max-w-7xl gap-4 mx-auto sm:px-6 lg:px-8">
-            <form name="createForm" @submit.prevent="submit">
-            <table class="w-full bg-savoy-blue rounded-t-md">
-                <thead class="text-2xl text-white font-bold font-montserrat">
-                    <tr>
-                        <th class="px-2 py-2 w-3/12" rowspan="2">Cash</th>
-                        <th class="px-2 py-2 w-4/12" colspan="2">On Hand</th>
-                        <th class="px-2 py-2 w-5/12" rowspan="2">Total</th>
-                    </tr>
-                    <tr>
-                        <th class="text-xl w-2/12">10 (Pc/s)</th>
-                        <th class="text-xl w-2/12">1 (Pc/s)</th>
-                    </tr>
-                </thead>
-            </table>
-            <table class = "w-full rounded-b-md bg-ghost-white">
-                <tbody class= "text-center font-montserrat">
-                    <!--onethousand-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[0]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.thousandsTens}}
+            <div class="w-full flex flex-col space-y-4 max-w-7xl gap-4 mx-auto sm:px-6 lg:px-8">
+                <form name="createForm" @submit.prevent="submit">
+                <table class="w-full bg-savoy-blue rounded-t-md">
+                    <thead class="text-2xl text-white font-bold font-montserrat">
+                        <tr>
+                            <th class="px-2 py-2 w-3/12" rowspan="2">Cash</th>
+                            <th class="px-2 py-2 w-2/12" colspan="2">10 pcs</th>
+                            <th class="px-2 py-2 w-2/12" colspan="2">1 pcs</th>
+                            <th class="px-2 py-2 w-5/12" rowspan="2">Total</th>
+                        </tr>
+                    </thead>
+                </table>
+                <table class = "w-full rounded-b-md bg-ghost-white">
+                    <tbody class= "text-center font-montserrat">
+                        <!--onethousand-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[0]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.thousandsTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.thousandsOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.thousandsOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.thousandsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.thousandsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--fivehundred-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[1]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiveHundredsTens}}
+                            </td>
+                        </tr>
+                        <!--fivehundred-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[1]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiveHundredsTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiveHundredsOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiveHundredsOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.fiveHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.fiveHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--twohundred-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[2]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twoHundredsTens}}
+                            </td>
+                        </tr>
+                        <!--twohundred-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[2]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twoHundredsTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twoHundredsOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twoHundredsOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.twoHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.twoHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--onehundred-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[3]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.oneHundredsTens}}
+                            </td>
+                        </tr>
+                        <!--onehundred-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[3]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.oneHundredsTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.oneHundredsOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.oneHundredsOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.oneHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.oneHundredsTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--fifty-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[4]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiftiesTens}}
+                            </td>
+                        </tr>
+                        <!--fifty-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[4]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiftiesTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiftiesOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiftiesOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.fiftiesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.fiftiesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--twenty-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[5]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twentiesTens}}
+                            </td>
+                        </tr>
+                        <!--twenty-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[5]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twentiesTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twentiesOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twentiesOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.twentiesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.twentiesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--ten-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[6]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.tensTens}}
+                            </td>
+                        </tr>
+                        <!--ten-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[6]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.tensTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.tensOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.tensOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.tensTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.tensTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--five-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[7]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fivesTens}}
+                            </td>
+                        </tr>
+                        <!--five-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[7]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fivesTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fivesOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fivesOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.fivesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.fivesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--one-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[8]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.onesTens}}
+                            </td>
+                        </tr>
+                        <!--one-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[8]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.onesTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.onesOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.onesOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.onesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.onesTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--twentyfivecents-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[9]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twentyFiveCentavosTens}}
+                            </td>
+                        </tr>
+                        <!--twentyfivecents-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[9]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twentyFiveCentavosTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.twentyFiveCentavosOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.twentyFiveCentavosOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.twentyFiveCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.twentyFiveCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--tencents-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[10]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.tenCentavosTens}}
+                            </td>
+                        </tr>
+                        <!--tencents-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[10]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.tenCentavosTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.tenCentavosOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.tenCentavosOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.tenCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.tenCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--fivecents-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[11]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiveCentavosTens}}
+                            </td>
+                        </tr>
+                        <!--fivecents-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[11]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiveCentavosTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.fiveCentavosOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.fiveCentavosOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.fiveCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.fiveCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--oncents-->
-                    <tr>
-                        <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[12]).toLocaleString('en-PH',
-                            {
-                                style: 'currency', currency: 'PHP'
-                            }) }}
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.oneCentavosTens}}
+                            </td>
+                        </tr>
+                        <!--oncents-->
+                        <tr>
+                            <td class="text-xl tracking-wide text-right px-2 py-2 border-r border-silver w-3/12">{{ parseFloat(cashValues[12]).toLocaleString('en-PH',
+                                {
+                                    style: 'currency', currency: 'PHP'
+                                }) }}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.oneCentavosTens}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="border-r border-silver w-2/12">
-                            <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
-                                <div>
-                                    {{data.oneCentavosOnes}}
+                            </td>
+                            <td class="border-r border-silver w-2/12">
+                                <div class="text-xl flex flex-col items-center justify-center px-2 py-2">
+                                    <div>
+                                        {{data.oneCentavosOnes}}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class = "w-5/12">
-                            <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
-                                <div>
-                                    {{ parseFloat(data.oneCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                            </td>
+                            <td class = "w-5/12">
+                                <div class="text-xl tracking-wide text-right px-2 py-2 font-bold flex flex-col">
+                                    <div>
+                                        {{ parseFloat(data.oneCentavosTotal).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </form>
-        </div>
-        <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+            <div class="w-full flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg flex justify-end gap-4">
                     <Link
                         v-if="recordExist && dayOut" className="px-6 py-2 text-white bg-savoy-blue font-bold font-montserrat rounded-md focus:outline-none hover:bg-vista-blue"

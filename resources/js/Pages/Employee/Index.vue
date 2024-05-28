@@ -61,11 +61,11 @@ const filteredEmployees = computed(() => {
     <Head title="Employee Management" />
     <BreezeAuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-savoy-blue leading-tight">Employee Management</h2>
+            <h2 class="font-semibold text-xl text-savoy-blue leading-tight">Employees</h2>
         </template>
 
-        <div class="py-6">
-            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-6 h-full flex">
+            <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8 grow">
                 <div className="flex items-center">
                     <Link
                         className="w-full flex justify-center px-6 py-2 text-white bg-dark-pastel-green text-3xl font-black rounded-md focus:outline-none hover:bg-emerald transition-all duration-300 ease-in-out"
@@ -73,7 +73,7 @@ const filteredEmployees = computed(() => {
                     +
                     </Link>
                 </div>
-                <div style="max-height: calc(90vh - 16rem);" class="overflow-y-auto">
+                <div class="h-32 overflow-y-auto grow">
                     <div className="grid figtree grid-cols-2 gap-2 ">
                         <div v-for="employee in filteredEmployees" :key="employee.id">
                             <Link :href="route('employees.edit', employee.id)"

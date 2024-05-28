@@ -8,7 +8,7 @@ import WarningDuplicateModal from '@/Components/WarningDuplicateModal.vue';
 import WarningIncompleteModal from '@/Components/WarningIncompleteModal.vue';
 import ConfirmInputModal from '@/Components/ConfirmInputModal.vue';
 import ConfirmBackModal from '@/Components/ConfirmBackModal.vue';
-import { ref, computed, onMounted, onUnmounted, defineEmits, reactive } from 'vue';
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
@@ -188,7 +188,7 @@ const closeInputCard = () => {
     console.log(jobOrderItems.value);
 }
 
-const emit = defineEmits();
+//const emit = defineEmits();
 const searchItem = ref("");
 const searchService = ref("");
 const searchEmployee = ref("");
@@ -465,8 +465,8 @@ const submit = async () => {
         <div v-if="isVisible5" class="fixed inset-0 flex items-center justify-center z-50">
             <ConfirmBackModal @confirmSubmission="exit" @close="closeWarning" />
         </div>
-        <div class="py-6 h-full ">
-            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full">
+        <div class="py-6 h-full w-full">
+            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full flex flex-col">
                 <div class="mb-4">
                     <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                         <div class="flex items-center justify-between">
@@ -483,50 +483,52 @@ const submit = async () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row gap-4 w-full space-x-2">
-                    <div class="w-3/5 h-full overflow-hidden p-4 bg-ghost-white rounded-md">
-                        <div class="px-8 pb-2 pt-6 flex flex-col justify-between items-center">
-                            <div class="w-full flex">
-                                <div class="w-3/5 flex flex-col">
-                                    <div class="text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                                        Job Order #{{ props.jobOrders.id }}
+                <div className="h-32 flex flex-row gap-4 w-full space-x-2 grow">
+                    <div class="w-3/5 flex flex-col bg-ghost-white rounded-md p-4 min-h-full max-h-full">
+                        <div class="px-8 pb-2 pt-6 flex justify-between items-center">
+                            <div class="w-full flex flex-col">
+                                <div class="w-full flex">
+                                    <div class="w-3/5 flex flex-col">
+                                        <div class="text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                                            Job Order #{{ props.jobOrders.id }}
+                                        </div>
+                                        <div class="text-lg font-montserrat font-bold px-1" :class="{
+                                            'text-saffron': props.jobOrders.jobOrderStatus == 'Ongoing',
+                                            'text-persian-red': props.jobOrders.jobOrderStatus == 'Cancelled',
+                                            'text-dark-pastel-green': props.jobOrders.jobOrderStatus == 'Done',
+                                        }">
+                                            Status: {{ props.jobOrders.jobOrderStatus }}
+                                        </div>
                                     </div>
-                                    <div class="text-lg font-montserrat font-bold px-1" :class="{
-                                        'text-saffron': props.jobOrders.jobOrderStatus == 'Ongoing',
-                                        'text-persian-red': props.jobOrders.jobOrderStatus == 'Cancelled',
-                                        'text-dark-pastel-green': props.jobOrders.jobOrderStatus == 'Done',
-                                    }">
-                                        Status: {{ props.jobOrders.jobOrderStatus }}
+                                    <div class="w-2/5 flex flex-col pt-1 items-end">
+                                        <div class="text-2xl font-montserrat font-bold text-right text-savoy-blue px-1">
+                                            {{ props.jobOrders.jobOrderDate }}</div>
+                                        <div class="text-lg text-right italic font-montserrat font-bold px-1" :class="{
+                                            'text-persian-red': props.jobOrders.paymentStatus == 'Unpaid',
+                                            'text-saffron': props.jobOrders.paymentStatus == 'Partially Paid',
+                                            'text-dark-pastel-green': props.jobOrders.paymentStatus == 'Fully Paid',
+                                        }">
+                                            {{ props.jobOrders.paymentStatus }}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="w-2/5 flex flex-col pt-1 items-end">
-                                    <div class="text-2xl font-montserrat font-bold text-right text-savoy-blue px-1">
-                                        {{ props.jobOrders.jobOrderDate }}</div>
-                                    <div class="text-lg text-right italic font-montserrat font-bold px-1" :class="{
-                                        'text-persian-red': props.jobOrders.paymentStatus == 'Unpaid',
-                                        'text-saffron': props.jobOrders.paymentStatus == 'Partially Paid',
-                                        'text-dark-pastel-green': props.jobOrders.paymentStatus == 'Fully Paid',
-                                    }">
-                                        {{ props.jobOrders.paymentStatus }}
-                                    </div>
+                                <div class="w-full relative font-montserrat px-1">
+                                    <BreezeTextArea id="vehicleDetails" type="input" @input="checkVehicleDetails"
+                                        className="mt-1 px-2 py-1 rounded-md w-full comments-2 text-sm" placeholder="Vehicle Model, License Plate, Color, etc."
+                                        v-model="form.vehicleDetails" autofocus autocomplete="off"/>
+                                    <span className="error-message text-red-600 text-sm absolute top-full left-0 -mt-1" v-if="form.errors.vehicleDetails">
+                                        {{ form.errors.vehicleDetails }}
+                                    </span>
                                 </div>
-                            </div>
-                            <div class="w-full relative font-montserrat px-1">
-                                <BreezeTextArea id="vehicleDetails" type="input" @input="checkVehicleDetails"
-                                    className="mt-1 px-2 py-1 rounded-md w-full comments-2 text-sm" placeholder="Vehicle Model, License Plate, Color, etc."
-                                    v-model="form.vehicleDetails" autofocus autocomplete="off"/>
-                                <span className="error-message text-red-600 text-sm absolute top-full left-0 -mt-1" v-if="form.errors.vehicleDetails">
-                                    {{ form.errors.vehicleDetails }}
-                                </span>
                             </div>
                         </div>
                         <div class="px-6">
                             <hr class="border-t border-solid border-gray-400 my-2">
                         </div>
-                        <div className="scrollable-table">
-                            <div>
-                                <table class="px-6 table-auto w-full rounded-md">
-                                    <thead class="sticky top-0">
+                        <div class="max-h-full grow flex flex-col gap-2 justify-between">
+                            <div className="h-32 overflow-y-auto grow flex flex-col">
+                                <table class="px-6 table-fixed w-full rounded-md">
+                                    <thead>
                                         <!-- First row of headers -->
                                         <tr class="bg-ghost-white text-savoy-blue">
                                             <th class="px-6 py-2 font-montserrat w-full">Mechanic Name</th>
@@ -551,99 +553,101 @@ const submit = async () => {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="px-6">
-                                <hr class="border-t border-solid border-gray-400 my-2">
-                            </div>
-                            <div>
-                                <table class="px-6 table-auto w-full rounded-md">
-                                    <thead class="sticky top-0">
-                                        <!-- First row of headers -->
-                                        <tr class="bg-ghost-white text-savoy-blue">
-                                            <th class="px-6 py-2 font-montserrat w-4/6">Service Name</th>
-                                            <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <div class="">
-                                    <table class="table-auto w-full font-montserrat overflow-hidden rounded-md">
-                                        <tbody>
-                                            <tr v-for="(jobOrderService, index) in jobOrderServices.value" :key="jobOrderService.id"
-                                                @click="selectOrderService(jobOrderService, index)"
-                                                class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out">
-                                                <button type="button" @click.stop="remove(jobOrderService, index)" class="bg pl-6">
-                                                    <div class="icon-container-2 w-7 h-7 transition-all duration-300 ease-in-out">
-                                                        <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-5 h-5" />
-                                                    </div>
-                                                </button>
-                                                <td class="px-4 py-2 font-montserrat text-left leading-4 w-4/6">
-                                                    <div>{{ jobOrderService.serviceName }}</div>
-                                                    <div class="pt-2 italic text-sm">{{ formatServiceID(jobOrderService.serviceID) }}
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-2 -ml-10 font-montserrat text-right w-2/6">
-                                                    {{ parseFloat(jobOrderService.amountPaid).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
-                                                </td>
+                                <div class="px-6">
+                                    <hr class="border-t border-solid border-gray-400 my-2">
+                                </div>
+                                <div>
+                                    <table class="px-6 table-auto w-full rounded-md">
+                                        <thead class="sticky top-0">
+                                            <!-- First row of headers -->
+                                            <tr class="bg-ghost-white text-savoy-blue">
+                                                <th class="px-6 py-2 font-montserrat w-4/6">Service Name</th>
+                                                <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
                                             </tr>
-                                        </tbody>
+                                        </thead>
                                     </table>
+                                    <div class="">
+                                        <table class="table-auto w-full font-montserrat overflow-hidden rounded-md">
+                                            <tbody>
+                                                <tr v-for="(jobOrderService, index) in jobOrderServices.value" :key="jobOrderService.id"
+                                                    @click="selectOrderService(jobOrderService, index)"
+                                                    class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out">
+                                                    <button type="button" @click.stop="remove(jobOrderService, index)" class="bg pl-6">
+                                                        <div class="icon-container-2 w-7 h-7 transition-all duration-300 ease-in-out">
+                                                            <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-5 h-5" />
+                                                        </div>
+                                                    </button>
+                                                    <td class="px-4 py-2 font-montserrat text-left leading-4 w-4/6">
+                                                        <div>{{ jobOrderService.serviceName }}</div>
+                                                        <div class="pt-2 italic text-sm">{{ formatServiceID(jobOrderService.serviceID) }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-2 -ml-10 font-montserrat text-right w-2/6">
+                                                        {{ parseFloat(jobOrderService.amountPaid).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="px-6">
+                                    <hr class="border-t border-solid border-gray-400 my-2">
+                                </div>
+                                <div>
+                                    <table class="px-6 table-auto w-full rounded-md">
+                                        <thead class="sticky top-0">
+                                            <!-- First row of headers -->
+                                            <tr class="bg-ghost-white text-savoy-blue">
+                                                <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
+                                                <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
+                                                <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="">
+                                        <table class="table-auto w-full font-montserrat overflow-hidden rounded-md">
+                                            <tbody>
+                                                <tr v-for="(jobOrderItem, index) in jobOrderItems.value" :key="jobOrderItem.id"
+                                                    @click="selectOrderItem(jobOrderItem, index)"
+                                                    class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out">
+                                                    <button type="button" @click.stop="remove(jobOrderItem, index)" class="h-full pl-6 button-container">
+                                                        <div class="icon-container-2 w-7 h-7 transition-all duration-300 ease-in-out">
+                                                            <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-4 h-4" />
+                                                        </div>
+                                                    </button>
+                                                    <td class="px-4 py-2 font-montserrat text-left leading-4 w-3/6">
+                                                        <div>{{ jobOrderItem.itemName }}</div>
+                                                        <div class="pt-2 italic text-sm">{{ jobOrderItem.itemSerialNumber }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-2 -ml-12 font-montserrat text-center w-1/6">
+                                                        {{ jobOrderItem.quantityUsed }} {{ props.inventories.find((item) => item.id == jobOrderItem.itemID)?.itemUnit }}.
+                                                    </td>
+                                                    <td class="px-6 py-2 font-montserrat text-right w-2/6">
+                                                        {{ parseFloat(jobOrderItem.amountPaid).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="px-6">
-                                <hr class="border-t border-solid border-gray-400 my-2">
-                            </div>
                             <div>
-                                <table class="px-6 table-auto w-full rounded-md">
-                                    <thead class="sticky top-0">
-                                        <!-- First row of headers -->
-                                        <tr class="bg-ghost-white text-savoy-blue">
-                                            <th class="px-6 py-2 font-montserrat w-3/6">Item Name</th>
-                                            <th class="px-6 py-2 font-montserrat w-1/6">Quantity</th>
-                                            <th class="px-6 py-2 font-montserrat w-2/6">Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <div class="">
-                                    <table class="table-auto w-full font-montserrat overflow-hidden rounded-md">
-                                        <tbody>
-                                            <tr v-for="(jobOrderItem, index) in jobOrderItems.value" :key="jobOrderItem.id"
-                                                @click="selectOrderItem(jobOrderItem, index)"
-                                                class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out">
-                                                <button type="button" @click.stop="remove(jobOrderItem, index)" class="h-full pl-6 button-container">
-                                                    <div class="icon-container-2 w-7 h-7 transition-all duration-300 ease-in-out">
-                                                        <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-4 h-4" />
-                                                    </div>
-                                                </button>
-                                                <td class="px-4 py-2 font-montserrat text-left leading-4 w-3/6">
-                                                    <div>{{ jobOrderItem.itemName }}</div>
-                                                    <div class="pt-2 italic text-sm">{{ jobOrderItem.itemSerialNumber }}
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-2 -ml-12 font-montserrat text-center w-1/6">
-                                                    {{ jobOrderItem.quantityUsed }} {{ props.inventories.find((item) => item.id == jobOrderItem.itemID)?.itemUnit }}.
-                                                </td>
-                                                <td class="px-6 py-2 font-montserrat text-right w-2/6">
-                                                    {{ parseFloat(jobOrderItem.amountPaid).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="px-6 m-2">
+                                    <BreezeTextArea id="generalNotes" type="input"
+                                        className="mt-1 px-2 py-1 rounded-md w-full comments" placeholder="Order Notes"
+                                        v-model="form.generalNotes" />
                                 </div>
-                            </div>
-                        </div>
-                        <div class="px-6 m-2">
-                            <BreezeTextArea id="generalNotes" type="input"
-                                className="mt-1 px-2 py-1 rounded-md w-full comments" placeholder="Order Notes"
-                                v-model="form.generalNotes" />
-                        </div>
-                        <div className="flex flex-row justify-between">
-                            <button type="submit" @click="submit"
-                                className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
-                                Save
-                            </button>
-                            <div className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
-                                <div>Total:</div>
-                                <span>{{ parseFloat(totalTotalSales ? totalTotalSales : 0).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}</span> 
+                                <div className="flex flex-row justify-between">
+                                    <button type="submit" @click="submit"
+                                        className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
+                                        Save
+                                    </button>
+                                    <div className="flex flex-row justify-between w-1/2 text-3xl font-montserrat font-bold text-savoy-blue px-1">
+                                        <div>Total:</div>
+                                        <span>{{ parseFloat(totalTotalSales ? totalTotalSales : 0).toLocaleString('en-PH',{style: 'currency', currency: 'PHP'}) }}</span> 
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

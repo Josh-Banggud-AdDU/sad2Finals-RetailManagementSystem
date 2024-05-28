@@ -32,6 +32,18 @@ export default {
                 montserrat: ['Montserrat', 'serif'], 
                 fontawesome: ['Font Awesome 5 Free']
             },
+            fontSize: {
+                xs: '0.50rem',
+                sm: '0.75rem', // 14px
+                base: '.875rem', // 16px
+                lg: '1rem', // 18px
+                xl: '1.125rem', // 20px
+                '2xl': '1.25rem', // 24px
+                '3xl': '1.5rem', // 30px
+                '4xl': '1.675rem', // 36px
+                '5xl': '2.25rem', // 48px
+                '6xl': '3rem', // 64px
+              },
         },
     },
 

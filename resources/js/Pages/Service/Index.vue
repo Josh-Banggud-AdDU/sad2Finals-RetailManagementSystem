@@ -91,7 +91,7 @@ const addServiceRecord = (service) => {
                 @close="isVisible = false"
                 ref='component' className="absolute border-b border-gray-200 shadow-sm rounded-lg z-50" />
         </div>
-        <div class="py-6">
+        <div class="py-6 w-full">
             <div class="flex flex-col space-y-4 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-6 bg-white shadow-sm border-gray-200 sm:rounded-lg">
                     <div className="flex items-center justify-between">
@@ -117,8 +117,7 @@ const addServiceRecord = (service) => {
                 <div style="max-height: calc(90vh - 16rem);" class="overflow-y-auto">
                     <div className="grid figtree grid-cols-3 gap-2 ">
                         <div v-for="service in filteredServices" :key="service.id">
-                            <div
-                                className="flex flex-col items-center w-full h-24 bg-ghost-white px-10 py-4 border-b border-gray-200 sm:rounded-lg">
+                            <div className="flex flex-col justify-center items-center w-full bg-ghost-white px-10 py-4 border-b border-gray-200 sm:rounded-lg">
                                 <div className="flex flex-row w-full">
                                     <div class="font-bold text-xl w-9/12 line-clamp-2" style="display: inline;">
                                         {{ service.serviceName }}

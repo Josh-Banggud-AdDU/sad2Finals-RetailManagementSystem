@@ -31,22 +31,6 @@ const reversedFinances = computed(() => {
 const salesItems = ref([]);
 const jobOrderItems = ref([]);
 const selectedLogDetails = ref({});
-//const jobOrderServices = ref([]);
-//const jobOrderEmployees = ref([]);
-const handleRowClick = (log) => {
-  selectedLog.value = log;
-  console.log(selectedLog.value);
-  if (selectedLog.value.salesID) {
-    salesItems.value = props.sale_items.filter((item) => item.salesID == selectedLog.value.salesID);
-    selectedLogDetails.value = props.sales.find((log) => log.id == selectedLog.value.salesID);
-    console.log(selectedLogDetails.value)
-  } else if (selectedLog.value.jobOrderID) {
-    jobOrderItems.value = props.job_order_items.filter((item) => item.jobOrderID == selectedLog.value.jobOrderID);
-    selectedLogDetails.value = props.job_orders.find((log) => log.id == selectedLog.value.jobOrderID);
-  }
-  //supplyOrderItems.value = props.inventory_log_items.filter((item) => item.inventory_logID === selectedLog.value.id);
-};
-
 const selectedLog = ref(null);
 
 const netCashflow = computed(() => {
@@ -208,11 +192,10 @@ const discrepancies = computed(() => {
                   </tr>
                 </thead>
               </table>
-              <div class="scrollable rounded-md">
-                <table class="table-auto w-full overflow-hidden">
+              <div class="rounded-md">
+                <table class="table-fixed w-full overflow-hidden">
                   <tbody class="">
-                    <tr v-for="log in reversedFinances" :key="log.id" @click="handleRowClick(log)"
-                      class="hover:bg-silver">
+                    <tr v-for="log in reversedFinances" :key="log.id">
                       <template v-if="log.transactionType !== ''">
                         <td class="border border-black pl-6 py-2 w-3/12 text-center font-montserrat">{{ new
                           Date(log.updated_at).toLocaleDateString() }}</td>
@@ -304,33 +287,6 @@ table.rounded-md {
   /* Use the color variable savoy-blue */
   font-family: noto-sans, sans-serif;
   /* Use the defined noto-sans font */
-}
-
-.scrollable {
-  height: 525px;
-  overflow-y: auto;
-}
-
-.scrollable-2 {
-  height: 385px;
-  overflow-y: auto;
-}
-
-.newscrollable {
-  width: 1008px;
-  overflow-x: auto;
-}
-
-.scrollable-table {
-  height: 295px;
-  /* Adjusted height */
-  overflow-y: auto;
-}
-
-.scrollable-table-b {
-  height: 295x;
-  /* Adjusted height */
-  overflow-y: auto;
 }
 
 .comments {

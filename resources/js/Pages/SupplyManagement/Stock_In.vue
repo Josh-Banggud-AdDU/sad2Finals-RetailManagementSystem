@@ -265,7 +265,7 @@ const submit = () => {
             <ConfirmBackModal @confirmSubmission="exit" @close="closeWarning" />
         </div>
         <div v-if="!isVisible3" class="py-6 h-full ">
-            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full">
+            <div class="relative max-w-7xl mx-auto sm:px-6 lg:px-8 h-full flex flex-col">
                 <div class="mb-4">
                     <div class="p-6 bg-ghost-white shadow-sm border-gray-200 sm:rounded-lg">
                         <div class="flex items-center justify-between">
@@ -283,8 +283,8 @@ const submit = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row gap-4 w-full space-x-2">
-                    <div class="w-3/5 h-full overflow-hidden p-4 bg-ghost-white rounded-md">
+                <div className="h-32 flex flex-row gap-4 w-full space-x-2 grow">
+                    <div class="w-3/5 h-full flex flex-col overflow-hidden p-4 bg-ghost-white rounded-md">
                         <div class="px-8 pb-2 pt-6 flex justify-between items-center">
                             <div class="w-full flex">
                                 <div class="w-3/4 flex flex-col">
@@ -307,49 +307,53 @@ const submit = () => {
                         <div class="px-6">
                             <hr class="border-t border-solid border-gray-400 my-2">
                         </div>
-                        <div>
-                            <table class="px-6 table-auto w-full rounded-md">
-                                <thead class="sticky top-0">
-                                    <!-- First row of headers -->
-                                    <tr class="bg-ghost-white text-savoy-blue">
-                                        <th class="px-6 py-2 font-montserrat w-4/5">Item Name</th>
-                                        <th class="px-6 py-2 font-montserrat w-1/5">Quantity</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div class="scrollable-table">
-                                <table class="table-auto w-full font-montserrat overflow-hidden rounded-md">
-                                    <tbody>
-                                        <tr v-for="(supplyOrderItem, index) in supplyOrderItems.value" :key="supplyOrderItem.id"
-                                            @click="selectOrderItem(supplyOrderItem, index)"
-                                            class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out"
-                                            >
-                                            <button type="button" @click.stop="remove(supplyOrderItem, index)" class="h-full pl-6">
-                                                <div class="icon-container-2 w-7 h-7">
-                                                    <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-4 h-4" />
-                                                </div>
-                                            </button>
-                                            <td class="px-4 py-2 font-montserrat text-left w-4/5">
-                                                <div>{{ supplyOrderItem.itemName }}</div>
-                                                <div class="pt-2 italic text-sm">{{ supplyOrderItem.itemSerialNumber }}
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-2 font-montserrat text-center w-1/5">
-                                                {{ supplyOrderItem.quantity }} {{ props.inventories.find((item) => item.id == supplyOrderItem.itemID)?.itemUnit }}.
-                                            </td>
+                        <div class="grow flex flex-col gap-2 justify-between">
+                            <div class="grow flex flex-col">
+                                <table class="px-6 table-fixed w-full rounded-md">
+                                    <thead class="sticky top-0">
+                                        <!-- First row of headers -->
+                                        <tr class="bg-ghost-white text-savoy-blue">
+                                            <th class="px-6 py-2 font-montserrat w-4/5">Item Name</th>
+                                            <th class="px-6 py-2 font-montserrat w-1/5">Quantity</th>
                                         </tr>
-                                    </tbody>
+                                    </thead>
                                 </table>
+                                <div class="h-36 overflow-y-auto grow">
+                                    <table class="table-fixed w-full font-montserrat overflow-hidden rounded-md">
+                                        <tbody class="min-h-full">
+                                            <tr v-for="(supplyOrderItem, index) in supplyOrderItems.value" :key="supplyOrderItem.id"
+                                                @click="selectOrderItem(supplyOrderItem, index)"
+                                                class="bg-ghost-white flex items-center hover:bg-silver transition-all duration-300 ease-in-out"
+                                                >
+                                                <button type="button" @click.stop="remove(supplyOrderItem, index)" class="h-full pl-6">
+                                                    <div class="icon-container-2 w-7 h-7">
+                                                        <font-awesome-icon :icon="['fas', 'trash-can']" class="icon-3 w-4 h-4" />
+                                                    </div>
+                                                </button>
+                                                <td class="px-4 py-2 font-montserrat text-left w-4/5">
+                                                    <div>{{ supplyOrderItem.itemName }}</div>
+                                                    <div class="pt-2 italic text-sm">{{ supplyOrderItem.itemSerialNumber }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-2 font-montserrat text-center w-1/5">
+                                                    {{ supplyOrderItem.quantity }} {{ props.inventories.find((item) => item.id == supplyOrderItem.itemID)?.itemUnit }}.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div class="px-6 m-2">
-                            <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments" placeholder="Order Notes" v-model="form.generalNotes"/>
-                        </div>
-                        <div>
-                            <button type="submit" @click="submit"
-                                className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
-                                Save
-                            </button>
+                            <div>
+                                <div class="px-6 m-2">
+                                    <BreezeTextArea id="generalNotes" type="input" className="mt-1 px-2 py-1 rounded-md w-full comments" placeholder="Order Notes" v-model="form.generalNotes"/>
+                                </div>
+                                <div>
+                                    <button type="submit" @click="submit"
+                                        className="px-6 py-2 text-white font-montserrat bg-dark-pastel-green font-bold rounded-md hover:bg-emerald transition-all duration-300 ease-in-out">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 w-2/5 overflow-hidden h-full">
@@ -376,7 +380,7 @@ const submit = () => {
                                 </button>
                             </ul>
                         </div>
-                        <div className="scrollable overflow-y-auto flex-col flex gap-2">
+                        <div className="overflow-y-auto flex-col flex gap-2">
                             <div v-for="item in filteredInventories" :key="item.id">
                                 <button type="button"
                                     className="relative flex flex-col figtree items-center h-24 w-full bg-ghost-white px-8 py-2 sm:rounded-lg hover:bg-silver transition-all duration-300 ease-in-out"
@@ -439,18 +443,6 @@ const submit = () => {
 #searchInput::placeholder {
     font-style: italic;
     font-size: 0.9rem;
-}
-
-.scrollable-table {
-    /* Adjusted height */
-    overflow-y: auto;
-    height: 415px;
-}
-
-.scrollable {
-    /* Adjusted height */
-    overflow-y: auto;
-    height: 740px;
 }
 
 .comments {
