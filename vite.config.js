@@ -17,7 +17,4 @@ export default defineConfig({
             },
         }),
     ],
-    build: {
-        assetsDir: 'resources/vendor/tightenco/ziggy/dist',
-      },
 });
